@@ -4,15 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\School;
 use Illuminate\Http\Request;
+use App\Services\SchoolService;
 
 class SchoolController extends Controller
 {
+    protected $schoolService;
+
+    public function __construct(SchoolService $schoolService)
+    {
+        $this->schoolService = $schoolService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('modules.schools.index');
+        return view('modules.schools.index', [
+            'schools' => $this->schoolService->getAllSchools(),
+        ]);
     }
 
     /**
