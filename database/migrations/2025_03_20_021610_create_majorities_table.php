@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('majorities', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name')->unique();
-            $table->unsignedInteger('school_id')->nullable();
+            $table->unsignedBigInteger('school_id')->nullable();
             $table->foreign('school_id')->references('id')->on('schools')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
             $table->softDeletes();
