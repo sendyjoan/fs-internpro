@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('website')->nullable();
             $table->unsignedBigInteger('school_id')->nullable();
             $table->foreign('school_id')->references('id')->on('schools')->onDelete('cascade')->onUpdate('cascade');
-            $table->timestamps();
+            $table->timestamps();   
             $table->softDeletes();
         });
     }
