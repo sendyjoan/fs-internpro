@@ -1,0 +1,41 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('school_membership_summary', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('school_id')->nullable()->index();
+            $table->foreign('school_id')->references('id')->on('schools')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('membership_id')->nullable()->index();
+            $table->foreign('membership_id')->references('id')->on('memberships')->onDelete('cascade')->onUpdate('cascade');
+            $table->date('start_membership')->nullable();
+            $table->date('end_membership')->nullable();
+            $table->integer('majors_used')->nullable()->default(0)->comment('Number of majors used');
+            $table->integer('classes_used')->nullable()->default(0)->comment('Number of classes used');
+            $table->integer('students_used')->nullable()->default(0)->comment('Number of students used');
+            $table->integer('partners_used')->nullable()->default(0)->comment('Number of partners used');
+            $table->integer('mentors_used')->nullable()->default(0)->comment('Number of mentors used');
+            $table->integer('programs_used')->nullable()->default(0)->comment('Number of programs used');
+            $table->integer('activities_used')->nullable()->default(0)->comment('Number of activities used');
+            $table->integer('storages_used')->nullable()->default(0)->comment('Number of storages used');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('school_membership_summary');
+    }
+};
