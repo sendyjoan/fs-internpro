@@ -18,9 +18,9 @@
                     <form method="POST" action="{{ route('login') }}" class="needs-validation" novalidate="">
                         @csrf
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input id="email" type="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" name="email" tabindex="0" required autofocus>
-                            @error('email')
+                            <label for="text">NIP/NISN/NIS/NIK</label>
+                            <input id="text" type="text" value="{{ old('username') }}" class="form-control @error('username') is-invalid @enderror" name="username" tabindex="0" required autofocus>
+                            @error('text')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

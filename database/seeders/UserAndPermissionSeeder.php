@@ -52,5 +52,9 @@ class UserAndPermissionSeeder extends Seeder
 
         $user = User::where('email', 'admin@mail.com')->first();
         $user->assignRole('admin');
+
+        $student = Role::create(['name' => 'student']);
+        $teacher = Role::create(['name' => 'teacher']);
+        $mentor = Role::create(['name' => 'mentor']);
     }
 }
