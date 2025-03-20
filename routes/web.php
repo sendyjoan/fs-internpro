@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AccessControlController;
 
@@ -47,6 +48,8 @@ Route::middleware('auth')->group(function () {
         Route::get('user-to-role/{user}/update', [AccessControlController::class, 'updateUserToRole'])->name('access-control.user-to-role-update');
         Route::post('user-to-role/{user}', [AccessControlController::class, 'saveUserToRole'])->name('access-control.user-to-role-save');
     });
+
+    Route::resource('schools', SchoolController::class);
 
 });
 
