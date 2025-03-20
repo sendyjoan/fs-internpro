@@ -15,6 +15,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('description');
+            $table->uuid('program_id')->nullable();
+            $table->foreign('program_id')->references('id')->on('programs')->onDelete('set null');
+            $table->uuid('teacher_id')->nullable();
+            $table->foreign('teacher_id')->references('id')->on('users')->onDelete('set null');
             $table->unsignedBigInteger('status_id')->nullable();
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
             $table->uuid('school_id')->nullable();
