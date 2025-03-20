@@ -27,6 +27,12 @@ return new class extends Migration
             $table->integer('programs_used')->nullable()->default(0)->comment('Number of programs used');
             $table->integer('activities_used')->nullable()->default(0)->comment('Number of activities used');
             $table->integer('storages_used')->nullable()->default(0)->comment('Number of storages used');
+            $table->uuid('created_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+            $table->uuid('updated_by')->nullable();
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
+            $table->uuid('deleted_by')->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();
         });
     }

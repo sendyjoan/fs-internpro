@@ -19,6 +19,12 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('contact')->nullable();
             $table->string('logo')->nullable();
+            $table->uuid('created_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+            $table->uuid('updated_by')->nullable();
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
+            $table->uuid('deleted_by')->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();
             $table->softDeletes();
         });

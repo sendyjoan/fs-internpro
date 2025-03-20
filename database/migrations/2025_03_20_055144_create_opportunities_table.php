@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('programs', function (Blueprint $table) {
+        Schema::create('opportunities', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name')->unique();
-            $table->text('description')->nullable();
+            $table->string('name');
+            $table->string('description');
+            $table->unsignedBigInteger('status_id')->nullable();
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
             $table->unsignedBigInteger('school_id')->nullable();
-            $table->foreign('school_id')->references('id')->on('schools')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('school_id')->references('id')->on('schools')->onDelete('set null');
+            $table->uuid('partner_id')->nullable();
+            $table->foreign('partner_id')->references('id')->on('partners')->onDelete('set null');
             $table->uuid('created_by')->nullable();
             $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
             $table->uuid('updated_by')->nullable();
@@ -33,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('programs');
+        Schema::dropIfExists('opportunities');
     }
 };

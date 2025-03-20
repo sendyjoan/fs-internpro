@@ -22,6 +22,12 @@ return new class extends Migration
             $table->string('website')->nullable();
             $table->unsignedBigInteger('school_id')->nullable();
             $table->foreign('school_id')->references('id')->on('schools')->onDelete('cascade')->onUpdate('cascade');
+            $table->uuid('created_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+            $table->uuid('updated_by')->nullable();
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
+            $table->uuid('deleted_by')->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();   
             $table->softDeletes();
         });
