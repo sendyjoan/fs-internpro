@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('contact')->nullable();
             $table->string('logo')->nullable();
+            $table->date('start_membership')->nullable();
+            $table->date('end_membership')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
