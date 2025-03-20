@@ -36,6 +36,20 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="form-group">
+                                <label for="school_phone">School Phone</label>
+                                <input type="text" value="{{ old('phone') }}" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone">
+                                @error ('phone')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="school_contact">School Contact</label>
+                                <input type="text" value="{{ old('contact') }}" class="form-control @error('contact') is-invalid @enderror" id="contact" name="contact">
+                                @error ('contact')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -45,7 +59,24 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="form-group">
+                                <label for="school_address">School Address</label>
+                                <input type="text" value="{{ old('address') }}" class="form-control @error('address') is-invalid @enderror" id="address" name="address">
+                                @error ('address')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="school_logo">School Logo</label>
+                                <input type="file" value="{{ old('logo') }}" class="form-control @error('logo') is-invalid @enderror" id="logo" name="logo">
+                                @error ('logo')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
+                        <div class="col-md-12 text-right">
+                            <a href="{{ route('schools.index') }}" class="btn btn-secondary">Back</a>
+                            <button type="submit" class="btn btn-primary">Create</button>
                     </div>
                 </form>
             </div>

@@ -21,7 +21,7 @@
                     <div class="col-md-4 d-flex justify-content-center card-header-form">
                     </div>
                     <div class="col-md-4 text-right">
-                        {{-- <a href="{{route('access-control.role-create')}}" type="button" class="btn btn-sm btn-primary text-white">Create</a> --}}
+                        <a href="{{route('schools.create')}}" type="button" class="btn btn-sm btn-primary text-white">Create</a>
                     </div>
                 </div>
             </div>
