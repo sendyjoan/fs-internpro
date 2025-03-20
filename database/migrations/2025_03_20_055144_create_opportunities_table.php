@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('description');
             $table->unsignedBigInteger('status_id')->nullable();
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
-            $table->unsignedBigInteger('school_id')->nullable();
+            $table->uuid('school_id')->nullable();
             $table->foreign('school_id')->references('id')->on('schools')->onDelete('set null');
             $table->uuid('partner_id')->nullable();
             $table->foreign('partner_id')->references('id')->on('partners')->onDelete('set null');

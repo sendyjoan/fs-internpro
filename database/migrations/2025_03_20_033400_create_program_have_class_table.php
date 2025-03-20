@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade')->onUpdate('cascade');
             $table->uuid('class_id')->nullable();
             $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('school_id')->nullable();
+            $table->uuid('school_id')->nullable();
             $table->foreign('school_id')->references('id')->on('schools')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
             $table->softDeletes();

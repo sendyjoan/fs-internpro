@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('partners', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name')->unique();
-            $table->string('email')->unique()->nullable();
-            $table->string('phone')->unique()->nullable();
+            $table->string('name');
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->string('contact')->nullable();
             $table->string('logo')->nullable();
             $table->string('website')->nullable();
-            $table->unsignedBigInteger('school_id')->nullable();
+            $table->uuid('school_id')->nullable();
             $table->foreign('school_id')->references('id')->on('schools')->onDelete('cascade')->onUpdate('cascade');
             $table->uuid('created_by')->nullable();
             $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');

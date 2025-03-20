@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('school_membership_summary', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('school_id')->nullable()->index();
+            $table->uuid('school_id')->nullable()->index();
             $table->foreign('school_id')->references('id')->on('schools')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('membership_id')->nullable()->index();
+            $table->uuid('membership_id')->nullable()->index();
             $table->foreign('membership_id')->references('id')->on('memberships')->onDelete('cascade')->onUpdate('cascade');
             $table->date('start_membership')->nullable();
             $table->date('end_membership')->nullable();

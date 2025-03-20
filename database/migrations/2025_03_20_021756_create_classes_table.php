@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name')->unique();
-            $table->unsignedBigInteger('school_id')->nullable();
+            $table->uuid('school_id')->nullable();
             $table->foreign('school_id')->references('id')->on('schools')->onDelete('cascade')->onUpdate('cascade');
             $table->uuid('majority_id')->nullable();
             $table->foreign('majority_id')->references('id')->on('majorities')->onDelete('cascade')->onUpdate('cascade');
