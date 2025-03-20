@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\School;
 use Illuminate\Http\Request;
 use App\Services\SchoolService;
+use Illuminate\Support\Facades\Log;
 
 class SchoolController extends Controller
 {
@@ -19,9 +20,17 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        return view('modules.schools.index', [
-            'schools' => $this->schoolService->getAllSchools(),
-        ]);
+        try {
+            Log::info('SchoolController@index: Fetching all schools');
+            return view('modules.schools.index', [
+                'schools' => $this->schoolService->getAllSchools(),
+            ]);
+        } catch (\Exception $e) {
+            // Return toast swal for error message
+            toast($e->getMessage(),'error');
+            Log::error('Error in SchoolController@index: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**
