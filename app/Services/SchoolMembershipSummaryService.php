@@ -32,7 +32,7 @@ class SchoolMembershipSummaryService
     {
         try {
             $membership = $this->membershipService->getMembershipById($data['membership_id']);
-            $data['end_membership'] = Carbon::parse($data['start_membership'])->addMonths($membership->duration);
+            $data['end_membership'] = Carbon::parse($data['start_membership'])->addMonths((int) $membership->duration);
             $data['end_membership'] = $data['end_membership']->format('Y-m-d');
             // Log the end membership date
             Log::info('End membership date calculated: ' . $data['end_membership']);
