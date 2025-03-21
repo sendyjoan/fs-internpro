@@ -36,7 +36,7 @@ class AdminDashboardController extends Controller
         $data['logs'] = array_reverse($dates);
 
         $logs = DB::table('logs')
-            ->select('level', 'message', DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d") as created_at'))
+            ->select('level', 'message', DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d") as date'), 'created_at')
             ->orderBy('created_at', 'desc');
 
         $data['latest_logs'] = $logs->get()->toArray();
