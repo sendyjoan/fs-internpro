@@ -4,7 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\School;
 use App\Repositories\Contracts\SchoolRepositoryInterface;
-
+use Illuminate\Support\Facades\Log;
 
 class SchoolRepository implements SchoolRepositoryInterface
 {
@@ -17,6 +17,7 @@ class SchoolRepository implements SchoolRepositoryInterface
 
     public function getAll()
     {
+        Log::info('Fetching all schools from repository');
         return $this->school->all();
     }
 

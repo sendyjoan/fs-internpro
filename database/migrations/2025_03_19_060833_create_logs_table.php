@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('logs', function (Blueprint $table) {
-            $table->id();
+            // $table->id();
             $table->string('level');
             $table->text('message');
             $table->json('context')->nullable();

@@ -1,9 +1,9 @@
 <aside id="sidebar-wrapper">
     <div class="sidebar-brand">
-      <a href="index.html">Starter Code</a>
+      <a href="index.html">InternPro</a>
     </div>
     <div class="sidebar-brand sidebar-brand-sm">
-      <a href="index.html">SC</a>
+      <a href="index.html">STI</a>
     </div>
     <ul class="sidebar-menu">
         @section('sidebar')
@@ -14,7 +14,9 @@
 
             <li class="menu-header">Settings</li>
 
-            <li class="{{ request()->routeIs('users.index') ? 'active' : '' }}"><a href="{{ route('users.index') }}" class="nav-link"><i class="fas fa-users"></i><span>User Management</span></a></li>
+            <li class="{{ request()->routeIs('admin-dashboard')  ? 'active' : '' }}"><a href="{{ route('admin-dashboard') }}" class="nav-link"><i class="fas fa-code"></i><span>Admin Dashboard</span></a></li>
+            <li class="{{ request()->routeIs('memberships.*')  ? 'active' : '' }}"><a href="{{ route('memberships.index') }}" class="nav-link"><i class="fas fa-code"></i><span>Membership</span></a></li>
+            <li class="{{ request()->routeIs('users.*') ? 'active' : '' }}"><a href="{{ route('users.index') }}" class="nav-link"><i class="fas fa-users"></i><span>User Management</span></a></li>
 
             <li class="nav-item dropdown {{ request()->routeIs('access-control.*') ? 'active' : '' }}">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Access Control</span></a>

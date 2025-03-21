@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\Contracts\SchoolRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class SchoolService
 {
@@ -16,6 +17,7 @@ class SchoolService
 
     public function getAllSchools()
     {
+        Log::info('Fetching all schools from service');
         return $this->schoolRepository->getAll();
     }
 
