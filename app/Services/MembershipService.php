@@ -58,20 +58,33 @@ class MembershipService
     {
         try {
             Log::info('Updating membership', ['id' => $id]);
-            $membership = Membership::findOrFail($id);
             $data['updated_by'] = Auth::user()->id;
-            $membership->update($data);
-            Log::info('Membership updated successfully', ['id' => $id]);
-            return $membership;
+            $result = $this->memberRepository->update($id, $data);
+            Log::info('Membership updated successfully', ['membership_id' => $result->id]);
+            return $result;
         } catch (\Exception $e) {
             Log::error('Error updating membership: ' . $e->getMessage(), ['id' => $id]);
             return null;
         }
     }
 
-    public function deleteUser($id)
+    public function deleteMembership($id)
     {
-        // $user = User::findOrFail($id);
-        // return $user->delete();
+        try {
+            Log::info('Deleting membership', ['id' => $id]);
+            $membership = $this->memberRepository->findById($id);
+            if (!$membership) {
+                Log::error('Membership not found for deletion', ['id' => $id]);
+                return false;
+            }
+            $membership->deleted_by = Auth::user()->id;
+            $membership->save();
+            $result = $this->memberRepository->delete($id);
+            Log::info('Membership deleted successfully', ['id' => $id]);
+            return $result;
+        } catch (\Exception $e) {
+            Log::error('Error deleting membership: ' . $e->getMessage(), ['id' => $id]);
+            return null;
+        }
     }
 }

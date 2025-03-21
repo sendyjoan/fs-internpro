@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Membership;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Repositories\Contracts\MembershipRepositoryInterface;
 
 class MembershipRepository implements MembershipRepositoryInterface
@@ -46,14 +47,26 @@ class MembershipRepository implements MembershipRepositoryInterface
 
     public function update($id, array $data)
     {
-        $membership = $this->findById($id);
-        $membership->update($data);
-        return $membership;
+        try{
+            Log::info('Updating membership with ID: ' . $id . ' with data: ' . json_encode($data));
+            $membership = $this->findById($id);
+            $membership->update($data);
+            return $membership;
+        } catch (\Exception $e) {
+            Log::error('Error updating membership: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function delete($id)
     {
-        $membership = $this->findById($id);
-        return $membership->delete();
+        try {
+            Log::info('Deleting membership with ID: ' . $id);
+            $membership = $this->findById($id);
+            return $membership->delete();
+        } catch (\Exception $e) {
+            Log::error('Error deleting membership: ' . $e->getMessage());
+            throw $e;
+        }
     }
 }

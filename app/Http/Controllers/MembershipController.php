@@ -83,7 +83,15 @@ class MembershipController extends Controller
      */
     public function show(Membership $membership)
     {
-        dd($membership);
+        try {
+            $membership = $this->membershipService->getMembershipById($membership->id);
+            Log::info('Displaying membership details', ['membership' => $membership]);
+            return view('modules.membership.view', compact('membership'));
+        } catch (\Exception $e) {
+            Log::error('Error displaying membership details', ['error' => $e->getMessage()]);
+            toast($e->getMessage(), 'error');
+            return redirect()->back()->with('error', 'Error displaying membership details');
+        }
     }
 
     /**
@@ -138,6 +146,15 @@ class MembershipController extends Controller
      */
     public function destroy(Membership $membership)
     {
-        dd($membership);
+        try {
+            $this->membershipService->deleteMembership($membership->id);
+            Log::info('Membership deleted successfully', ['membership' => $membership]);
+            toast('Membership deleted successfully', 'success');
+            return redirect()->route('memberships.index');
+        } catch (\Exception $e) {
+            Log::error('Error deleting membership', ['error' => $e->getMessage()]);
+            toast($e->getMessage(), 'error');
+            return redirect()->back()->with('error', 'Error deleting membership');
+        }
     }
 }
