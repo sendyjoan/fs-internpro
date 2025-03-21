@@ -26,32 +26,4 @@ class School extends Model
         'updated_by',
         'deleted_by',
     ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'created_by' => 'uuid',
-            'updated_by' => 'uuid',
-            'deleted_by' => 'uuid',
-        ];
-    }
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'created_by',
-        'updated_by',
-        'deleted_by',
-        'deleted_at',
-        'created_at',
-        'updated_at',
-    ];
 }

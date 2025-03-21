@@ -16,7 +16,7 @@ class MembershipSeeder extends Seeder
         Membership::create([
             'name' => 'Free',
             'price' => 0,
-            'duration' => 30,
+            'duration' => 1,
             'max_majors' => 1,
             'max_classes' => 1,
             'max_students' => 10,
@@ -28,8 +28,8 @@ class MembershipSeeder extends Seeder
         ]);
         Membership::create([
             'name' => 'Basic',
-            'price' => 10,
-            'duration' => 30,
+            'price' => 10000,
+            'duration' => 2,
             'max_majors' => 2,
             'max_classes' => 2,
             'max_students' => 20,
@@ -41,8 +41,8 @@ class MembershipSeeder extends Seeder
         ]);
         Membership::create([
             'name' => 'Pro',
-            'price' => 20,
-            'duration' => 30,
+            'price' => 20000,
+            'duration' => 3,
             'max_majors' => 3,
             'max_classes' => 3,
             'max_students' => 30,
