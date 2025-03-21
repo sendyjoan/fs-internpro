@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\AccessControlController;
 
 Route::get('/', function () {
@@ -50,6 +51,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::resource('schools', SchoolController::class);
+    Route::resource('memberships', MembershipController::class);
 
 });
 
