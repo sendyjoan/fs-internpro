@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\SchoolMembershipSummary;
 use App\Repositories\Contracts\SchoolMembershipSummaryRepositoryInterfaces;
 
@@ -26,7 +27,13 @@ class SchoolMembershipSummaryRepository implements SchoolMembershipSummaryReposi
 
     public function create(array $data)
     {
-        return $this->schoolMembershipSummary->create($data);
+        try {
+            Log::info('Creating a new SchoolMembershipSummary');
+            return $this->schoolMembershipSummary->create($data);
+        } catch (\Exception $e) {
+            Log::error('Error creating SchoolMembershipSummary: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function update($id, array $data)
