@@ -1,9 +1,9 @@
 <aside id="sidebar-wrapper">
     <div class="sidebar-brand">
-      <a href="index.html">Starter Code</a>
+      <a href="index.html">InternPro</a>
     </div>
     <div class="sidebar-brand sidebar-brand-sm">
-      <a href="index.html">SC</a>
+      <a href="index.html">STI</a>
     </div>
     <ul class="sidebar-menu">
         @section('sidebar')
