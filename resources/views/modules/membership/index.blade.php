@@ -44,7 +44,7 @@
                                     <td>{{ $membership->name }}</td>
                                     <td>{{ 'Rp. ' . number_format($membership->price, 2, ',', '.') }}</td>
                                     <td>{{ $membership->duration }}</td>
-                                    <td>0</td>
+                                    <td>{{ $membership->schoolMembershipSummary->count() }}</td>
                                     <td>
                                         <a href="{{ route('memberships.show', $membership->id) }}" class="btn btn-sm btn-primary detail text-info"><i class="fas fa-info-circle"></i></a>
                                         <a href="{{ route('memberships.edit', $membership->id) }}" class="btn btn-sm btn-primary update text-warning"><i class="fas fa-edit"></i></a>

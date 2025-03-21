@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\School;
 use Illuminate\Database\Eloquent\Model;
 
 class SchoolMembershipSummary extends Model
@@ -23,4 +24,14 @@ class SchoolMembershipSummary extends Model
         'updated_by',
         'deleted_by',
     ];
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
+
+    public function membership()
+    {
+        return $this->belongsTo(Membership::class);
+    }
 }

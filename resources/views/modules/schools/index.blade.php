@@ -35,6 +35,7 @@
                                 <th>Contact</th>
                                 <th>Email</th>
                                 <th>Phone</th>
+                                <th>Membership</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -47,6 +48,7 @@
                                     <td>{{ $school->contact }}</td>
                                     <td>{{ $school->email }}</td>
                                     <td>{{ $school->phone }}</td>
+                                    <td>{{ $school->memberships->membership->name }}</td>
                                     <td>
                                         {{-- <a href="{{ route('access-control.role-show', $role->id) }}" class="btn btn-sm btn-primary detail text-info"><i class="fas fa-info-circle"></i></a>
                                         <a href="{{ route('access-control.role-update', $role->id) }}" class="btn btn-sm btn-primary update text-warning"><i class="fas fa-edit"></i></a>

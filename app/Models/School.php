@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Models\SchoolMembershipSummary;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class School extends Model
 {
@@ -26,4 +27,9 @@ class School extends Model
         'updated_by',
         'deleted_by',
     ];
+
+    public function memberships()
+    {
+        return $this->hasOne(SchoolMembershipSummary::class);
+    }
 }
