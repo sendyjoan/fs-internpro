@@ -55,7 +55,7 @@
                             @foreach ($data['latest_logs'] as $log)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $log->created_at }}</td>
+                                    <td>{{ $log->date }}</td>
                                     <td>{{ $log->level }}</td>
                                     <td>{{ Str::limit($log->message, 50) }}</td>
                                 </tr>
