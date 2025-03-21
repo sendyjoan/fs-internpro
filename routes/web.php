@@ -7,6 +7,7 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\AccessControlController;
+use App\Http\Controllers\AdminDashboardController;
 
 Route::get('/', function () {
     // return view('welcome');
@@ -52,6 +53,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('schools', SchoolController::class);
     Route::resource('memberships', MembershipController::class);
+    Route::get('admin-dashboard', [AdminDashboardController::class, 'index'])->name('admin-dashboard');
 
 });
 
