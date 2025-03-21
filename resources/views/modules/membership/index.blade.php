@@ -46,13 +46,13 @@
                                     <td>{{ $membership->duration }}</td>
                                     <td>0</td>
                                     <td>
-                                        {{-- <a href="{{ route('access-control.role-show', $role->id) }}" class="btn btn-sm btn-primary detail text-info"><i class="fas fa-info-circle"></i></a>
-                                        <a href="{{ route('access-control.role-update', $role->id) }}" class="btn btn-sm btn-primary update text-warning"><i class="fas fa-edit"></i></a>
-                                        <form action="{{ route('access-control.role-destroy', $role->id) }}" method="POST" class="d-inline">
+                                        <a href="{{ route('memberships.show', $membership->id) }}" class="btn btn-sm btn-primary detail text-info"><i class="fas fa-info-circle"></i></a>
+                                        <a href="{{ route('memberships.edit', $membership->id) }}" class="btn btn-sm btn-primary update text-warning"><i class="fas fa-edit"></i></a>
+                                        <form action="{{ route('memberships.destroy', $membership->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-primary delete text-danger"><i class="fas fa-trash"></i></button>
-                                        </form> --}}
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

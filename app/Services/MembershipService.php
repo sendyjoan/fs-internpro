@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Membership;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -28,12 +29,18 @@ class MembershipService
         }
     }
 
-    public function getUserById($id)
+    public function getMembershipById($id)
     {
-        // return User::findOrFail($id);
+        try {
+            Log::info('Fetching membership by ID from service', ['id' => $id]);
+            return $this->memberRepository->findById($id);
+        } catch (\Exception $e) {
+            Log::error('Error fetching membership by ID: ' . $e->getMessage(), ['id' => $id]);
+            return null;
+        }
     }
 
-    public function createUser(array $data)
+    public function createMembership(array $data)
     {
         try {
             $data['created_by'] = Auth::user()->id;
@@ -47,14 +54,19 @@ class MembershipService
         }
     }
 
-    public function updateUser($id, array $data)
+    public function updateMembership($id, array $data)
     {
-        // $user = User::findOrFail($id);
-        // if (isset($data['password'])) {
-        //     $data['password'] = Hash::make($data['password']);
-        // }
-        // $user->update($data);
-        // return $user;
+        try {
+            Log::info('Updating membership', ['id' => $id]);
+            $membership = Membership::findOrFail($id);
+            $data['updated_by'] = Auth::user()->id;
+            $membership->update($data);
+            Log::info('Membership updated successfully', ['id' => $id]);
+            return $membership;
+        } catch (\Exception $e) {
+            Log::error('Error updating membership: ' . $e->getMessage(), ['id' => $id]);
+            return null;
+        }
     }
 
     public function deleteUser($id)

@@ -67,7 +67,7 @@ class MembershipController extends Controller
             'max_storages' => 'required|integer'
         ]);
         try {
-            $membership = $this->membershipService->createUser($request->all());
+            $membership = $this->membershipService->createMembership($request->all());
             Log::info('Membership created successfully', ['membership' => $membership]);
             toast('Membership created successfully', 'success');
             return redirect()->route('memberships.index');
@@ -83,7 +83,7 @@ class MembershipController extends Controller
      */
     public function show(Membership $membership)
     {
-        //
+        dd($membership);
     }
 
     /**
@@ -91,15 +91,46 @@ class MembershipController extends Controller
      */
     public function edit(Membership $membership)
     {
-        //
+        try {
+            Log::info('Displaying edit membership form', ['membership' => $membership]);
+            $membership = $this->membershipService->getMembershipById($membership->id);
+            return view('modules.membership.update', compact('membership'));
+        } catch (\Exception $e) {
+            Log::error('Error displaying edit membership form', ['error' => $e->getMessage()]);
+            toast($e->getMessage(), 'error');
+            return redirect()->back()->with('error', 'Error displaying edit membership form');
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Membership $membership)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'duration' => 'required|integer',
+            'max_majors' => 'required|integer',
+            'max_students' => 'required|integer',
+            'max_classes' => 'required|integer',
+            'max_partners' => 'required|integer',
+            'max_mentors' => 'required|integer',
+            'max_programs' => 'required|integer',
+            'max_activities' => 'required|integer',
+            'max_storages' => 'required|integer'
+        ]);
+        
+        try {
+            $membership = $this->membershipService->updateMembership($id, $request->all());
+            Log::info('Membership updated successfully', ['membership' => $membership]);
+            toast('Membership updated successfully', 'success');
+            return redirect()->route('memberships.index');
+        } catch (\Exception $e) {
+            Log::error('Error updating membership', ['error' => $e->getMessage()]);
+            toast($e->getMessage(), 'error');
+            return redirect()->back()->with('error', 'Error updating membership');
+        }
     }
 
     /**
@@ -107,6 +138,6 @@ class MembershipController extends Controller
      */
     public function destroy(Membership $membership)
     {
-        //
+        dd($membership);
     }
 }
