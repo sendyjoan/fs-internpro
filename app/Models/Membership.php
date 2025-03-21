@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\SchoolMembershipSummary;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -40,5 +41,10 @@ class Membership extends Model
     public function deletedBy()
     {
         return $this->belongsTo(User::class, 'deleted_by');
+    }
+
+    public function schoolMembershipSummary()
+    {
+        return $this->hasMany(SchoolMembershipSummary::class);
     }
 }
