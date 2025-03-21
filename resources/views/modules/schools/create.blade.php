@@ -50,6 +50,19 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="form-group">
+                                <label for="membership">Membership</label>
+                                {{-- <input type="text" value="{{ old('membership') }}" class="form-control @error('membership') is-invalid @enderror" id="membership" name="membership"> --}}
+                                <select class="form-control @error('membership') is-invalid @enderror" id="membership" name="membership">
+                                    <option value="">Select Membership</option>
+                                    @foreach ($memberships as $membership)
+                                        <option value="{{ $membership->id }}" {{ old('membership') == $membership->id ? 'selected' : '' }}>{{ $membership->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error ('membership')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -70,6 +83,13 @@
                                 <label for="school_logo">School Logo</label>
                                 <input type="file" value="{{ old('logo') }}" class="form-control @error('logo') is-invalid @enderror" id="logo" name="logo">
                                 @error ('logo')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="start_member">Start Membership</label>
+                                <input type="date" value="{{ old('start_member') }}" class="form-control @error('start_member') is-invalid @enderror" id="start_member" name="start_member">
+                                @error ('start_member')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

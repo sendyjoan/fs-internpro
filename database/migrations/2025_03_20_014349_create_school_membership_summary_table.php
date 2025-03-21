@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('school_membership_summary', function (Blueprint $table) {
+        Schema::create('school_membership_summaries', function (Blueprint $table) {
             $table->id();
             $table->uuid('school_id')->nullable()->index();
             $table->foreign('school_id')->references('id')->on('schools')->onDelete('cascade')->onUpdate('cascade');
             $table->uuid('membership_id')->nullable()->index();
             $table->foreign('membership_id')->references('id')->on('memberships')->onDelete('cascade')->onUpdate('cascade');
             $table->date('start_membership')->nullable();
-            $table->date('end_membership')->nullable();
+            $table->date('end_membership')->nullable(false);
             $table->integer('majors_used')->nullable()->default(0)->comment('Number of majors used');
             $table->integer('classes_used')->nullable()->default(0)->comment('Number of classes used');
             $table->integer('students_used')->nullable()->default(0)->comment('Number of students used');
@@ -42,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('school_membership_summary');
+        Schema::dropIfExists('school_membership_summaries');
     }
 };

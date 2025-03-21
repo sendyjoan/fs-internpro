@@ -17,8 +17,13 @@ class SchoolRepository implements SchoolRepositoryInterface
 
     public function getAll()
     {
-        Log::info('Fetching all schools from repository');
-        return $this->school->all();
+        try {
+            Log::info('Fetching all schools from repository');
+            return $this->school->all();
+        } catch (\Exception $e) {
+            Log::error('Error fetching all schools: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function findById($id)
@@ -28,7 +33,13 @@ class SchoolRepository implements SchoolRepositoryInterface
 
     public function create(array $data)
     {
-        return $this->school->create($data);
+        try {
+            Log::info('Creating a new school in repository');
+            return $this->school->create($data);
+        } catch (\Exception $e) {
+            Log::error('Error creating school: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function update($id, array $data)

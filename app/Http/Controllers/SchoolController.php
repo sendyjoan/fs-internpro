@@ -5,15 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\School;
 use Illuminate\Http\Request;
 use App\Services\SchoolService;
+use Illuminate\Support\Facades\DB;
+use App\Services\MembershipService;
 use Illuminate\Support\Facades\Log;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SchoolController extends Controller
 {
     protected $schoolService;
+    protected $membershipService;
 
-    public function __construct(SchoolService $schoolService)
+    public function __construct(SchoolService $schoolService, MembershipService $membershipService)
     {
         $this->schoolService = $schoolService;
+        $this->membershipService = $membershipService;
     }
     /**
      * Display a listing of the resource.
@@ -22,6 +27,7 @@ class SchoolController extends Controller
     {
         try {
             Log::info('SchoolController@index: Fetching all schools');
+            Alert::toast('Schools retrieved successfully', 'success');
             return view('modules.schools.index', [
                 'schools' => $this->schoolService->getAllSchools(),
             ]);
@@ -38,7 +44,17 @@ class SchoolController extends Controller
      */
     public function create()
     {
-        return view('modules.schools.create');
+        try {
+            // Get Memberships
+            $memberships = $this->membershipService->getAllMemberships();
+            Log::info('SchoolController@create: Showing create school form');
+            return view('modules.schools.create', compact('memberships'));
+        } catch (\Exception $e) {
+            // Return toast swal for error message
+            toast($e->getMessage(),'error');
+            Log::error('Error in SchoolController@create: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**
@@ -46,7 +62,30 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:15',
+            'contact' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'address' => 'required|string|max:255',
+            'membership' => 'required|exists:memberships,id',
+            'start_member' => 'required|date',
+        ]);
+        try {
+            Log::info('SchoolController@store: Creating a new school');
+            // Begin transaction
+            DB::beginTransaction();
+            $school = $this->schoolService->createSchool($request->all());
+            Log::info('SchoolController@store: School created successfully', ['school' => $school]);
+            Alert::toast('School created successfully', 'success');
+            DB::commit();
+            return redirect()->route('schools.index');
+        } catch (\Exception $e) {
+            // Return toast swal for error message
+            toast($e->getMessage(),'error');
+            Log::error('Error in SchoolController@store: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**
