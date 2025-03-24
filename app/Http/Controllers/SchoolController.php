@@ -93,7 +93,7 @@ class SchoolController extends Controller
      */
     public function show(School $school)
     {
-        //
+        dd('Details of school');
     }
 
     /**
@@ -101,7 +101,7 @@ class SchoolController extends Controller
      */
     public function edit(School $school)
     {
-        //
+        dd('Edit school');
     }
 
     /**
@@ -109,7 +109,7 @@ class SchoolController extends Controller
      */
     public function update(Request $request, School $school)
     {
-        //
+        dd('Update school');
     }
 
     /**
@@ -117,6 +117,6 @@ class SchoolController extends Controller
      */
     public function destroy(School $school)
     {
-        //
+        dd('Delete school');
     }
 }
