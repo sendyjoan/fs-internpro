@@ -54,4 +54,15 @@ class SchoolRepository implements SchoolRepositoryInterface
         $school = $this->findById($id);
         return $school->delete();
     }
+
+    public function getAllSchoolWithMembership()
+    {
+        try {
+            Log::info('Fetching all schools with membership from repository');
+            return $this->school->with('membership.membership')->get();
+        } catch (\Exception $e) {
+            Log::error('Error fetching all schools with membership: ' . $e->getMessage());
+            throw $e;
+        }
+    }
 }
