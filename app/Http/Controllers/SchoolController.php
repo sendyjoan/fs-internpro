@@ -93,6 +93,16 @@ class SchoolController extends Controller
      */
     public function show(School $school)
     {
+        try {
+            $school = $this->schoolService->getSchoolById($school->id);
+            Log::info('SchoolController@show: Showing school details', ['school' => $school]);
+            return view('modules.schools.view', compact('school'));
+        } catch (\Exception $e) {
+            // Return toast swal for error message
+            toast($e->getMessage(),'error');
+            Log::error('Error in SchoolController@show: ' . $e->getMessage());
+            return redirect()->back();
+        }
         dd('Details of school');
     }
 

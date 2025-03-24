@@ -30,9 +30,15 @@ class SchoolService
         }
     }
 
-    public function getUserById($id)
+    public function getSchoolById($id)
     {
-        // return User::findOrFail($id);
+        try {
+            Log::info('Fetching school by ID from service', ['id' => $id]);
+            return $this->schoolRepository->findById($id);
+        } catch (\Exception $e) {
+            Log::error('Error fetching school by ID: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function createSchool(array $data)

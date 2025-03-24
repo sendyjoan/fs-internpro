@@ -28,7 +28,13 @@ class SchoolRepository implements SchoolRepositoryInterface
 
     public function findById($id)
     {
-        return $this->school->findOrFail($id);
+        try {
+            Log::info('Fetching school by ID from repository', ['id' => $id]);
+            return $this->school->findOrFail($id)->with('membership.membership')->first();
+        } catch (\Exception $e) {
+            Log::error('Error fetching school by ID: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function create(array $data)
