@@ -62,19 +62,32 @@ class SchoolService
         }
     }
 
-    public function updateUser($id, array $data)
+    public function updateSchool($id, array $data)
     {
-        // $user = User::findOrFail($id);
-        // if (isset($data['password'])) {
-        //     $data['password'] = Hash::make($data['password']);
-        // }
-        // $user->update($data);
-        // return $user;
+       try {
+            Log::info('Updating school', ['school_id' => $id]);
+            $data['updated_by'] = Auth::user()->id;
+            $school = $this->schoolRepository->update($id, $data);
+            Log::info('School updated successfully', ['school_id' => $school->id]);
+            return $school;
+        } catch (\Exception $e) {
+            Log::error('Error updating school: ' . $e->getMessage());
+            throw $e;
+        }
+ }
+
+    public function deleteSchool($id)
+    {
+        try {
+            Log::info('Deleting school', ['school_id' => $id]);
+            return $this->schoolRepository->delete($id);
+        } catch (\Exception $e) {
+            Log::error('Error deleting school: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
-    public function deleteUser($id)
-    {
-        // $user = User::findOrFail($id);
-        // return $user->delete();
+    public function adjustmentSchool($id){
+        
     }
 }

@@ -22,6 +22,7 @@
                     </div>
                     <div class="col-md-4 text-right">
                         <a href="{{route('schools.index')}}" type="button" class="btn btn-sm btn-primary text-white">Back</a>
+                        <a href="{{route('schools.adjustment', $school->id)}}" type="button" class="btn btn-sm btn-warning text-white">Adjustment</a>
                     </div>
                 </div>
             </div>

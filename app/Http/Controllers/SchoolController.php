@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Membership;
 use App\Models\School;
 use Illuminate\Http\Request;
 use App\Services\SchoolService;
@@ -103,7 +104,6 @@ class SchoolController extends Controller
             Log::error('Error in SchoolController@show: ' . $e->getMessage());
             return redirect()->back();
         }
-        dd('Details of school');
     }
 
     /**
@@ -111,7 +111,21 @@ class SchoolController extends Controller
      */
     public function edit(School $school)
     {
-        dd('Edit school');
+        try {
+            Log::info('SchoolController@edit: Start showing edit school form');
+            $school = $this->schoolService->getSchoolById($school->id);
+            Log::info('Request data Memberships');
+            $memberships = $this->membershipService->getAllMemberships();
+            // dd($school, $memberships);
+            Log::info('SchoolController@edit: Showing edit school form', ['school' => $school]);
+            // dd($school);
+            return view('modules.schools.edit', compact('school', 'memberships'));
+        } catch (\Exception $e) {
+            // Return toast swal for error message
+            toast($e->getMessage(),'error');
+            Log::error('Error in SchoolController@edit: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**
@@ -119,7 +133,31 @@ class SchoolController extends Controller
      */
     public function update(Request $request, School $school)
     {
-        dd('Update school');
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:15',
+            'contact' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'address' => 'required|string|max:255',
+            'membership' => 'required|exists:memberships,id',
+            'start_member' => 'required|date',
+        ]);
+        try {
+            Log::info('SchoolController@update: Updating school details', ['school' => $school]);
+            // Begin transaction
+            DB::beginTransaction();
+            $school = $this->schoolService->updateSchool($school->id, $request->all());
+            Log::info('SchoolController@update: School updated successfully', ['school' => $school]);
+            Alert::toast('School updated successfully', 'success');
+            DB::commit();
+            return redirect()->route('schools.index');
+        } catch (\Exception $e) {
+            // Return toast swal for error message
+            DB::rollBack();
+            toast($e->getMessage(),'error');
+            Log::error('Error in SchoolController@update: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**
@@ -127,6 +165,26 @@ class SchoolController extends Controller
      */
     public function destroy(School $school)
     {
-        dd('Delete school');
+        try {
+            Log::info('SchoolController@destroy: Deleting school', ['school' => $school]);
+            // Begin transaction
+            DB::beginTransaction();
+            $this->schoolService->deleteSchool($school->id);
+            Log::info('SchoolController@destroy: School deleted successfully', ['school' => $school]);
+            Alert::toast('School deleted successfully', 'success');
+            DB::commit();
+            return redirect()->route('schools.index');
+        } catch (\Exception $e) {
+            // Return toast swal for error message
+            DB::rollBack();
+            toast($e->getMessage(),'error');
+            Log::error('Error in SchoolController@destroy: ' . $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    public function adjustment(School $school)
+    {
+        return view('modules.schools.adjustment');
     }
 }

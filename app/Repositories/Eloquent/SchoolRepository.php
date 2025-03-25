@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\School;
 use App\Repositories\Contracts\SchoolRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class SchoolRepository implements SchoolRepositoryInterface
@@ -19,7 +20,7 @@ class SchoolRepository implements SchoolRepositoryInterface
     {
         try {
             Log::info('Fetching all schools from repository');
-            return $this->school->with('membership.membership')->all();
+            return $this->school->with('membership.membership')->get();
         } catch (\Exception $e) {
             Log::error('Error fetching all schools: ' . $e->getMessage());
             throw $e;
@@ -50,15 +51,29 @@ class SchoolRepository implements SchoolRepositoryInterface
 
     public function update($id, array $data)
     {
-        $school = $this->findById($id);
-        $school->update($data);
-        return $school;
+        try {
+            Log::info('Updating school in repository', ['id' => $id]);
+            $school = $this->findById($id);
+            $school->update($data);
+            return $school;
+        } catch (\Exception $e) {
+            Log::error('Error updating school: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function delete($id)
     {
-        $school = $this->findById($id);
-        return $school->delete();
+        try {
+            Log::info('Deleting school from repository', ['id' => $id]);
+            $school = $this->findById($id);
+            $school->deleted_by = Auth::user()->id;
+            $school->save();
+            return $school->delete();
+        } catch (\Exception $e) {
+            Log::error('Error deleting school: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function getAllSchoolWithMembership()
