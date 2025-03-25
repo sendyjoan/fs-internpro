@@ -28,43 +28,6 @@
                 <div id="chart"></div>
             </div>
         </div>
-        <div class="card">
-            <div class="card-header">
-                <div class="row w-100">
-                    <div class="col-md-4">
-                        <h4>Detail Logs</h4>
-                    </div>
-                    <div class="col-md-4 d-flex justify-content-center card-header-form">
-                    </div>
-                    <div class="col-md-4 text-right">
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Date</th>
-                                <th>Level</th>
-                                <th>Message</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($data['latest_logs'] as $log)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $log->date }}</td>
-                                    <td>{{ $log->level }}</td>
-                                    <td>{{ Str::limit($log->message, 50) }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div> 
     </div>
 </section>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
