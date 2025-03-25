@@ -19,7 +19,7 @@ class SchoolRepository implements SchoolRepositoryInterface
     {
         try {
             Log::info('Fetching all schools from repository');
-            return $this->school->all();
+            return $this->school->with('membership.membership')->all();
         } catch (\Exception $e) {
             Log::error('Error fetching all schools: ' . $e->getMessage());
             throw $e;

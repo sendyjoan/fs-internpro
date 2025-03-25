@@ -21,7 +21,7 @@ class SchoolService
     {
         try {
             Log::info('Fetching all schools from service');
-            $return = $this->schoolRepository->getAllSchoolWithMembership();
+            $return = $this->schoolRepository->getAll();
             // dd($return);
             return $return;
         } catch (\Exception $e) {
