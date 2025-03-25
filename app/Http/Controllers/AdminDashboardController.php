@@ -39,8 +39,6 @@ class AdminDashboardController extends Controller
             ->select('level', 'message', DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d") as date'), 'created_at')
             ->orderBy('created_at', 'desc');
 
-        $data['latest_logs'] = $logs->get()->toArray();
-        // dd($data);
         return view('modules.dashboard.admin-dashboard', compact('data'));
     }
 }

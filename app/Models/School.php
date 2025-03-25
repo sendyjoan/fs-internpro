@@ -28,7 +28,7 @@ class School extends Model
         'deleted_by',
     ];
 
-    public function memberships()
+    public function membership()
     {
         return $this->hasOne(SchoolMembershipSummary::class);
     }

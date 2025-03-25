@@ -48,15 +48,15 @@
                                     <td>{{ $school->contact }}</td>
                                     <td>{{ $school->email }}</td>
                                     <td>{{ $school->phone }}</td>
-                                    <td>{{ $school->memberships->membership->name }}</td>
+                                    <td>{{ $school->membership->membership->name }}</td>
                                     <td>
-                                        {{-- <a href="{{ route('access-control.role-show', $role->id) }}" class="btn btn-sm btn-primary detail text-info"><i class="fas fa-info-circle"></i></a>
-                                        <a href="{{ route('access-control.role-update', $role->id) }}" class="btn btn-sm btn-primary update text-warning"><i class="fas fa-edit"></i></a>
-                                        <form action="{{ route('access-control.role-destroy', $role->id) }}" method="POST" class="d-inline">
+                                        <a href="{{ route('schools.show', $school->id) }}" class="btn btn-sm btn-primary detail text-info"><i class="fas fa-info-circle"></i></a>
+                                        <a href="{{ route('schools.edit', $school->id) }}" class="btn btn-sm btn-primary update text-warning"><i class="fas fa-edit"></i></a>
+                                        <form action="{{ route('schools.destroy', $school->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-primary delete text-danger"><i class="fas fa-trash"></i></button>
-                                        </form> --}}
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

@@ -3,6 +3,7 @@
 namespace App\Repositories\Eloquent;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Models\SchoolMembershipSummary;
 use App\Repositories\Contracts\SchoolMembershipSummaryRepositoryInterfaces;
 
@@ -46,6 +47,13 @@ class SchoolMembershipSummaryRepository implements SchoolMembershipSummaryReposi
     public function delete($id)
     {
         $schoolMembershipSummary = $this->findById($id);
+        $schoolMembershipSummary->deleted_by = Auth::user()->id;
+        $schoolMembershipSummary->save();
         return $schoolMembershipSummary->delete();
+    }
+
+    public function getSchoolMembershipSummaryBySchoolId($schoolId)
+    {
+        return $this->schoolMembershipSummary->where('school_id', $schoolId)->first();
     }
 }
