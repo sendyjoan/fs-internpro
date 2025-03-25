@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('schools', SchoolController::class);
     Route::get('schools/{school}/adjustment', [SchoolController::class, 'adjustment'])->name('schools.adjustment');
+    Route::post('schools/{school}/adjustment', [SchoolController::class, 'saveAdjustment'])->name('schools.save-adjustment');
     Route::resource('memberships', MembershipController::class);
     Route::get('admin-dashboard', [AdminDashboardController::class, 'index'])->name('admin-dashboard');
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Membership;
 use App\Models\School;
+use App\Models\SchoolMembershipSummary;
 use Illuminate\Http\Request;
 use App\Services\SchoolService;
 use Illuminate\Support\Facades\DB;
@@ -15,11 +16,13 @@ class SchoolController extends Controller
 {
     protected $schoolService;
     protected $membershipService;
+    protected $summaryService;
 
-    public function __construct(SchoolService $schoolService, MembershipService $membershipService)
+    public function __construct(SchoolService $schoolService, MembershipService $membershipService, SchoolMembershipSummary $summaryService)
     {
         $this->schoolService = $schoolService;
         $this->membershipService = $membershipService;
+        $this->summaryService = $summaryService;
     }
     /**
      * Display a listing of the resource.
@@ -185,6 +188,13 @@ class SchoolController extends Controller
 
     public function adjustment(School $school)
     {
-        return view('modules.schools.adjustment');
+        Log::info('SchoolController@adjustment: Showing school adjustment form', ['school' => $school]);
+        $school = $this->schoolService->getSchoolById($school->id);
+        return view('modules.schools.adjustment', compact('school'));
+    }
+
+    public function saveAdjustment(Request $request, School $school)
+    {
+        dd($request->all());
     }
 }
