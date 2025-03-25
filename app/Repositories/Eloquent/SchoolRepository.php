@@ -31,7 +31,8 @@ class SchoolRepository implements SchoolRepositoryInterface
     {
         try {
             Log::info('Fetching school by ID from repository', ['id' => $id]);
-            return $this->school->findOrFail($id)->with('membership.membership')->first();
+            // return $this->school->findOrFail($id)->with('membership.membership')->first();
+            return $this->school->where('id', $id)->with('membership')->with('membership.membership')->first();
         } catch (\Exception $e) {
             Log::error('Error fetching school by ID: ' . $e->getMessage());
             throw $e;

@@ -51,4 +51,9 @@ class SchoolMembershipSummaryRepository implements SchoolMembershipSummaryReposi
         $schoolMembershipSummary->save();
         return $schoolMembershipSummary->delete();
     }
+
+    public function getSchoolMembershipSummaryBySchoolId($schoolId)
+    {
+        return $this->schoolMembershipSummary->where('school_id', $schoolId)->first();
+    }
 }

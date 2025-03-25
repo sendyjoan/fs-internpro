@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Services\SchoolService;
 use Illuminate\Support\Facades\DB;
 use App\Services\MembershipService;
+use App\Services\SchoolMembershipSummaryService;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -18,7 +19,7 @@ class SchoolController extends Controller
     protected $membershipService;
     protected $summaryService;
 
-    public function __construct(SchoolService $schoolService, MembershipService $membershipService, SchoolMembershipSummary $summaryService)
+    public function __construct(SchoolService $schoolService, MembershipService $membershipService, SchoolMembershipSummaryService $summaryService)
     {
         $this->schoolService = $schoolService;
         $this->membershipService = $membershipService;
@@ -99,6 +100,7 @@ class SchoolController extends Controller
     {
         try {
             $school = $this->schoolService->getSchoolById($school->id);
+            // dd($school);
             Log::info('SchoolController@show: Showing school details', ['school' => $school]);
             return view('modules.schools.view', compact('school'));
         } catch (\Exception $e) {
@@ -190,11 +192,32 @@ class SchoolController extends Controller
     {
         Log::info('SchoolController@adjustment: Showing school adjustment form', ['school' => $school]);
         $school = $this->schoolService->getSchoolById($school->id);
-        return view('modules.schools.adjustment', compact('school'));
+        $memberships = $this->membershipService->getAllMemberships();
+        return view('modules.schools.adjustment', compact('school', 'memberships'));
     }
 
     public function saveAdjustment(Request $request, School $school)
     {
-        dd($request->all());
+        $request->validate([
+            'membership_id' => 'required|exists:memberships,id',
+            'start_member' => 'required|date',
+        ]);
+        try {
+            Log::info('SchoolController@saveAdjustment: Saving school adjustment', ['school' => $school]);
+            // Begin transaction
+            DB::beginTransaction();
+            $sch = $school;
+            $school = $this->summaryService->adjustment($school->id, $request->all());
+            Log::info('SchoolController@saveAdjustment: School adjustment saved successfully', ['school' => $school]);
+            Alert::toast('School adjustment saved successfully', 'success');
+            DB::commit();
+            return redirect()->route('schools.adjustment', $sch->id);
+        } catch (\Exception $e) {
+            // Return toast swal for error message
+            DB::rollBack();
+            toast($e->getMessage(),'error');
+            Log::error('Error in SchoolController@saveAdjustment: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 }
