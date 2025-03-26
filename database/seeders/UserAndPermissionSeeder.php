@@ -37,13 +37,19 @@ class UserAndPermissionSeeder extends Seeder
             'school-create',
             'school-edit',
             'school-delete',
+            'membership-list',
+            'membership-create',
+            'membership-edit',
+            'membership-delete',
+            'school-adjustment-create',
+            'dashboard-system'
         ];
 
         foreach ($permissions as $permission) {
             Permission::create(['name' => $permission]);
         }
         
-        $role = Role::create(['name' => 'admin']);
+        $role = Role::create(['name' => 'Super Administrator']);
         
         $permissions = Permission::all();
         foreach ($permissions as $permission) {
@@ -51,7 +57,13 @@ class UserAndPermissionSeeder extends Seeder
         }
 
         $user = User::where('email', 'admin@mail.com')->first();
-        $user->assignRole('admin');
+        $user->assignRole('Super Administrator');
+
+        $schoolAdministrator = Role::create(['name' => 'School Administrator']);
+        $permissions = Permission::where('name', 'dashboard-access')->get();
+        foreach ($permissions as $permission) {
+            $schoolAdministrator->givePermissionTo($permission);
+        }
 
         $student = Role::create(['name' => 'student']);
         $teacher = Role::create(['name' => 'teacher']);
