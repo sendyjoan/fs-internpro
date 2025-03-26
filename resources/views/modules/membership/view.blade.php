@@ -73,19 +73,19 @@
                     </tr>
                     <tr>
                         <th>Created At</th>
-                        <td>{{$membership->created_at}}</td>
+                        <td>{{ $membership->created_at ?? '-' }}</td>
                     </tr>
                     <tr>
                         <th>Created By</th>
-                        <td>{{$membership->createdBy->name}}</td>
+                        <td>{{ $membership->createdBy->name ?? '-' }}</td>
                     </tr>
                     <tr>
                         <th>Updated At</th>
-                        <td>{{$membership->updated_at}}</td>
+                        <td>{{ $membership->updated_at ?? '-' }}</td>
                     </tr>
                     <tr>
                         <th>Updated By</th>
-                        <td>{{$membership->updatedBy->name}}</td>
+                        <td>{{ $membership->updatedBy->name ?? '-' }}</td>
                     </tr>
                 </table>
             </div>

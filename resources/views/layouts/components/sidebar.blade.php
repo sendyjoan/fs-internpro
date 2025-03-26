@@ -7,17 +7,25 @@
     </div>
     <ul class="sidebar-menu">
         @section('sidebar')
-            <li class="menu-header">Dashboard</li>
             @if (auth()->user()->can('dashboard-access'))
-                <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}"><a href="{{ route('dashboard') }}" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a></li>
+              <li class="menu-header">Dashboard</li>
+              <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}"><a href="{{ route('dashboard') }}" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a></li>
             @endif
 
-            <li class="menu-header">Settings</li>
-
-            <li class="{{ request()->routeIs('admin-dashboard')  ? 'active' : '' }}"><a href="{{ route('admin-dashboard') }}" class="nav-link"><i class="fas fa-code"></i><span>Admin Dashboard</span></a></li>
-            <li class="{{ request()->routeIs('memberships.*')  ? 'active' : '' }}"><a href="{{ route('memberships.index') }}" class="nav-link"><i class="fas fa-code"></i><span>Membership</span></a></li>
-            <li class="{{ request()->routeIs('schools.*')  ? 'active' : '' }}"><a href="{{ route('schools.index') }}" class="nav-link"><i class="fas fa-code"></i><span>Schools</span></a></li>
-            <li class="{{ request()->routeIs('users.*') ? 'active' : '' }}"><a href="{{ route('users.index') }}" class="nav-link"><i class="fas fa-users"></i><span>User Management</span></a></li>
+            @if (auth()->user()->can('permission-list') || auth()->user()->can('role-list') || auth()->user()->can('user-list') || auth()->user()->can('membership-list') || auth()->user()->can('school-list') || auth()->user()->can('dashboard-system'))
+              <li class="menu-header">Settings</li>
+              @if (auth()->user()->can('dashboard-system'))
+                <li class="{{ request()->routeIs('admin-dashboard')  ? 'active' : '' }}"><a href="{{ route('admin-dashboard') }}" class="nav-link"><i class="fas fa-code"></i><span>Admin Dashboard</span></a></li>
+              @endif
+              @if (auth()->user()->can('membership-list'))
+                <li class="{{ request()->routeIs('memberships.*')  ? 'active' : '' }}"><a href="{{ route('memberships.index') }}" class="nav-link"><i class="fas fa-code"></i><span>Membership</span></a></li>
+              @endif
+              @if (auth()->user()->can('school-list'))
+                <li class="{{ request()->routeIs('schools.*')  ? 'active' : '' }}"><a href="{{ route('schools.index') }}" class="nav-link"><i class="fas fa-code"></i><span>Schools</span></a></li>
+              @endif
+              @if (auth()->user()->can('user-list'))
+                <li class="{{ request()->routeIs('users.*') ? 'active' : '' }}"><a href="{{ route('users.index') }}" class="nav-link"><i class="fas fa-users"></i><span>User Management</span></a></li>
+              @endif
 
             <li class="nav-item dropdown {{ request()->routeIs('access-control.*') ? 'active' : '' }}">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Access Control</span></a>
@@ -27,6 +35,7 @@
               <li class="{{ request()->routeIs('access-control.permission-index') ? 'active' : '' }}"><a class="nav-link" href="{{ route('access-control.permission-index') }}">Permissions Management</a></li>
               </ul>
             </li>
+            @endif
         @show
       </ul>
   </aside>
