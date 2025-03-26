@@ -6,9 +6,45 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class AccessControlController extends Controller
+class AccessControlController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(
+                middleware: 'permission:permission-list',
+                only: ['indexPermission']
+            ),
+            new Middleware(
+                middleware: 'permission:role-list',
+                only: ['indexRole', 'showRole']
+            ),
+            new Middleware(
+                middleware: 'permission:role-edit',
+                only: ['updateRole', 'saveRole']
+            ),
+            new Middleware(
+                middleware: 'permission:role-create',
+                only: ['createRole', 'storeRole']
+            ),
+            new Middleware(
+                middleware: 'permission:role-delete',
+                only: ['destroyRole']
+            ),
+            new Middleware(
+                middleware: 'permission:user-role-list',
+                only: ['indexUserToRole']
+            ),
+            new Middleware(
+                middleware: 'permission:user-role-edit',
+                only: ['updateUserToRole', 'saveUserToRole']
+            ),
+        ];
+    }
+
     public function indexPermission(Request $request)
     {
         $perPage = $request->input('per_page', 10);

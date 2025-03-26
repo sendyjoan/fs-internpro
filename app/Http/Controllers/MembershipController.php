@@ -17,7 +17,6 @@ class MembershipController extends Controller implements HasMiddleware
     public function __construct(MembershipService $membershipService)
     {
         $this->membershipService = $membershipService;
-        // $this->middleware('permission:membership-list')->only(['index']);
     }
 
     public static function middleware(): array
@@ -39,10 +38,6 @@ class MembershipController extends Controller implements HasMiddleware
                 middleware: 'permission:membership-delete',
                 only: ['destroy']
             ),
-            // 'permission:membership-list' => ['only' => ['index']],
-            // 'permission:membership-create' => ['only' => ['create', 'store']],
-            // 'permission:membership-edit' => ['only' => ['edit', 'update']],
-            // 'permission:membership-delete' => ['only' => ['destroy']],
         ];
     }
 
