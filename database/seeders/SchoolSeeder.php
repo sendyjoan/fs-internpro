@@ -33,7 +33,7 @@ class SchoolSeeder extends Seeder
                 'school_id' => $smkdev->id,
                 'membership_id' => $membership->id,
                 'start_membership' => now()->format('Y-m-d'),
-                'end_membership' => now()->addMonth($membership->duration)->format('Y-m-d'),
+                'end_membership' => now()->addMonth((int) $membership->duration)->format('Y-m-d'),
             ]);
         }
         if (env('APP_ENV') === 'testing'){
@@ -52,7 +52,7 @@ class SchoolSeeder extends Seeder
                 'school_id' => $smkdev->id,
                 'membership_id' => $membership->id,
                 'start_membership' => now()->format('Y-m-d'),
-                'end_membership' => now()->addMonth($membership->duration)->format('Y-m-d'),
+                'end_membership' => now()->addMonth((int)$membership->duration)->format('Y-m-d'),
             ]);
         }
         if (env('APP_ENV') === 'production') {
@@ -71,7 +71,7 @@ class SchoolSeeder extends Seeder
                 'school_id' => $smk1->id,
                 'membership_id' => $membership->id,
                 'start_membership' => now()->format('Y-m-d'),
-                'end_membership' => now()->addMonth($membership->duration)->format('Y-m-d'),
+                'end_membership' => now()->addMonth((int)$membership->duration)->format('Y-m-d'),
             ]);
         }
     }
