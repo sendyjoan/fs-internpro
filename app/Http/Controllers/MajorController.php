@@ -2,17 +2,56 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Major;
 use Illuminate\Http\Request;
+use App\Services\MajorService;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class MajorController extends Controller
+class MajorController extends Controller implements HasMiddleware
 {
+    protected $majorService;
+    public function __construct(MajorService $majorService)
+    {
+        $this->majorService = $majorService;
+    }
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(
+                middleware: 'permission:major-list',
+                only: ['index']
+            ),
+            new Middleware(
+                middleware: 'permission:major-create',
+                only: ['create', 'store']
+            ),
+            new Middleware(
+                middleware: 'permission:major-edit',
+                only: ['edit', 'update']
+            ),
+            new Middleware(
+                middleware: 'permission:major-delete',
+                only: ['destroy']
+            ),
+        ];
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        try{
+            Log::info('Fetching all majors from controller');
+            $majors = $this->majorService->getAllMajors();
+            return view('modules.majors.index', compact('majors'));
+        }catch (Exception $e){
+            Log::error('Error fetching majors: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error fetching majors: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -20,7 +59,7 @@ class MajorController extends Controller
      */
     public function create()
     {
-        //
+        dd('create');
     }
 
     /**
@@ -28,7 +67,7 @@ class MajorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd('store');
     }
 
     /**
@@ -36,7 +75,7 @@ class MajorController extends Controller
      */
     public function show(Major $major)
     {
-        //
+        dd('show');
     }
 
     /**
@@ -44,7 +83,7 @@ class MajorController extends Controller
      */
     public function edit(Major $major)
     {
-        //
+        dd('edit');
     }
 
     /**
@@ -52,7 +91,7 @@ class MajorController extends Controller
      */
     public function update(Request $request, Major $major)
     {
-        //
+        dd('update');
     }
 
     /**
@@ -60,6 +99,6 @@ class MajorController extends Controller
      */
     public function destroy(Major $major)
     {
-        //
+        dd('destroy');
     }
 }
