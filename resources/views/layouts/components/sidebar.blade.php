@@ -15,13 +15,13 @@
             @if (auth()->user()->can('permission-list') || auth()->user()->can('role-list') || auth()->user()->can('user-list') || auth()->user()->can('membership-list') || auth()->user()->can('school-list') || auth()->user()->can('dashboard-system'))
               <li class="menu-header">Settings</li>
               @if (auth()->user()->can('dashboard-system'))
-                <li class="{{ request()->routeIs('admin-dashboard')  ? 'active' : '' }}"><a href="{{ route('admin-dashboard') }}" class="nav-link"><i class="fas fa-code"></i><span>Admin Dashboard</span></a></li>
+                <li class="{{ request()->routeIs('admin-dashboard')  ? 'active' : '' }}"><a href="{{ route('admin-dashboard') }}" class="nav-link"><i class="fas fa-chart-line"></i><span>Admin Dashboard</span></a></li>
               @endif
               @if (auth()->user()->can('membership-list'))
-                <li class="{{ request()->routeIs('memberships.*')  ? 'active' : '' }}"><a href="{{ route('memberships.index') }}" class="nav-link"><i class="fas fa-code"></i><span>Membership</span></a></li>
+                <li class="{{ request()->routeIs('memberships.*')  ? 'active' : '' }}"><a href="{{ route('memberships.index') }}" class="nav-link"><i class="fas fa-money-check-alt"></i><span>Membership</span></a></li>
               @endif
               @if (auth()->user()->can('school-list'))
-                <li class="{{ request()->routeIs('schools.*')  ? 'active' : '' }}"><a href="{{ route('schools.index') }}" class="nav-link"><i class="fas fa-code"></i><span>Schools</span></a></li>
+                <li class="{{ request()->routeIs('schools.*')  ? 'active' : '' }}"><a href="{{ route('schools.index') }}" class="nav-link"><i class="fas fa-building"></i><span>Schools</span></a></li>
               @endif
               @if (auth()->user()->can('user-list'))
                 <li class="{{ request()->routeIs('users.*') ? 'active' : '' }}"><a href="{{ route('users.index') }}" class="nav-link"><i class="fas fa-users"></i><span>User Management</span></a></li>
