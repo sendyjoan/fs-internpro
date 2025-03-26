@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             UserAndPermissionSeeder::class,
             MembershipSeeder::class,
             SchoolSeeder::class,
+            AdministratorSeeder::class,
         ]);
     }
 }
