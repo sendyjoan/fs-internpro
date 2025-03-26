@@ -21,7 +21,9 @@
                     <div class="col-md-4 d-flex justify-content-center card-header-form">
                     </div>
                     <div class="col-md-4 text-right">
-                        <a href="{{route('memberships.create')}}" type="button" class="btn btn-sm btn-primary text-white">Create</a>
+                        @if (auth()->user()->can('membership-create'))
+                            <a href="{{route('memberships.create')}}" type="button" class="btn btn-sm btn-primary text-white">Create</a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -34,7 +36,9 @@
                                 <th>Price</th>
                                 <th>Duration</th>
                                 <th>Count used</th>
+                                @if (auth()->user()->can('membership-edit') || auth()->user()->can('membership-delete'))
                                 <th>Action</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -45,15 +49,23 @@
                                     <td>{{ 'Rp. ' . number_format($membership->price, 2, ',', '.') }}</td>
                                     <td>{{ $membership->duration }}</td>
                                     <td>{{ $membership->schoolMembershipSummary->count() }}</td>
+                                    @if (auth()->user()->can('membership-edit') || auth()->user()->can('membership-delete'))
                                     <td>
+                                        @if (auth()->user()->can('membership-list'))
                                         <a href="{{ route('memberships.show', $membership->id) }}" class="btn btn-sm btn-primary detail text-info"><i class="fas fa-info-circle"></i></a>
+                                        @endif
+                                        @if (auth()->user()->can('membership-edit'))
                                         <a href="{{ route('memberships.edit', $membership->id) }}" class="btn btn-sm btn-primary update text-warning"><i class="fas fa-edit"></i></a>
+                                        @endif
+                                        @if (auth()->user()->can('membership-delete'))
                                         <form action="{{ route('memberships.destroy', $membership->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-primary delete text-danger"><i class="fas fa-trash"></i></button>
                                         </form>
+                                        @endif
                                     </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>

@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Membership;
 use App\Models\School;
-use App\Models\SchoolMembershipSummary;
+use App\Models\Membership;
 use Illuminate\Http\Request;
 use App\Services\SchoolService;
 use Illuminate\Support\Facades\DB;
 use App\Services\MembershipService;
-use App\Services\SchoolMembershipSummaryService;
 use Illuminate\Support\Facades\Log;
+use App\Models\SchoolMembershipSummary;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Routing\Controllers\Middleware;
+use App\Services\SchoolMembershipSummaryService;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class SchoolController extends Controller
+class SchoolController extends Controller implements HasMiddleware
 {
     protected $schoolService;
     protected $membershipService;
@@ -24,6 +26,32 @@ class SchoolController extends Controller
         $this->schoolService = $schoolService;
         $this->membershipService = $membershipService;
         $this->summaryService = $summaryService;
+    }
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(
+                middleware: 'permission:school-list',
+                only: ['index']
+            ),
+            new Middleware(
+                middleware: 'permission:school-create',
+                only: ['create', 'store']
+            ),
+            new Middleware(
+                middleware: 'permission:school-edit',
+                only: ['edit', 'update']
+            ),
+            new Middleware(
+                middleware: 'permission:school-delete',
+                only: ['destroy']
+            ),
+            new Middleware(
+                middleware: 'permission:school-adjustment',
+                only: ['adjustment', 'saveAdjustment']
+            ),
+        ];
     }
     /**
      * Display a listing of the resource.

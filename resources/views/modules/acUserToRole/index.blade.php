@@ -37,7 +37,9 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Role</th>
-                                <th>Action</th>
+                                @if (auth()->user()->can('user-role-edit'))
+                                    <th>Action</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -50,9 +52,11 @@
                                             <span class="badge badge-primary">{{ $role->name }}</span><br><br>
                                         @endforeach
                                     </td>
+                                    @if (auth()->user()->can('user-role-edit'))
                                     <td>
                                         <a href="{{route('access-control.user-to-role-update', $user->id)}}" class="btn btn-sm btn-primary update text-warning"><i class="fas fa-edit"></i></a>
                                     </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>

@@ -21,7 +21,9 @@
                     <div class="col-md-4 d-flex justify-content-center card-header-form">
                     </div>
                     <div class="col-md-4 text-right">
-                        <a href="{{route('access-control.role-create')}}" type="button" class="btn btn-sm btn-primary text-white">Create</a>
+                        @if (auth()->user()->can('role-create'))
+                            <a href="{{route('access-control.role-create')}}" type="button" class="btn btn-sm btn-primary text-white">Create</a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -31,7 +33,9 @@
                             <tr>
                                 <th>#</th>
                                 <th>Role Name</th>
-                                <th>Action</th>
+                                @if (auth()->user()->can('role-list') || auth()->user()->can('role-edit') || auth()->user()->can('role-delete'))
+                                    <th>Action</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -39,15 +43,23 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $role->name }}</td>
-                                    <td>
-                                        <a href="{{ route('access-control.role-show', $role->id) }}" class="btn btn-sm btn-primary detail text-info"><i class="fas fa-info-circle"></i></a>
-                                        <a href="{{ route('access-control.role-update', $role->id) }}" class="btn btn-sm btn-primary update text-warning"><i class="fas fa-edit"></i></a>
-                                        <form action="{{ route('access-control.role-destroy', $role->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-primary delete text-danger"><i class="fas fa-trash"></i></button>
-                                        </form>
-                                    </td>
+                                    @if (auth()->user()->can('role-list') || auth()->user()->can('role-edit') || auth()->user()->can('role-delete'))
+                                        <td>
+                                            @if (auth()->user()->can('role-list'))
+                                            <a href="{{ route('access-control.role-show', $role->id) }}" class="btn btn-sm btn-primary detail text-info"><i class="fas fa-info-circle"></i></a>
+                                            @endif
+                                            @if (auth()->user()->can('role-edit'))
+                                            <a href="{{ route('access-control.role-update', $role->id) }}" class="btn btn-sm btn-primary update text-warning"><i class="fas fa-edit"></i></a>
+                                            @endif
+                                            @if (auth()->user()->can('role-delete'))
+                                            <form action="{{ route('access-control.role-destroy', $role->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-primary delete text-danger"><i class="fas fa-trash"></i></button>
+                                            </form>
+                                            @endif
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>

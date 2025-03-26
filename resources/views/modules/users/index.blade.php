@@ -37,6 +37,7 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Email</th>
+                            <th>Sekolah</th>
                             <th>Roles</th>
                             <th>Action</th>
                         </tr>
@@ -47,6 +48,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
+                                <td>{{ $user->school ? $user->school->name : '-' }}</td>
                                 <td>
                                     @foreach ($user->roles as $role)
                                         <span class="badge badge-primary">{{ $role->name }}</span><br><br>
