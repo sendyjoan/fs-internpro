@@ -3,18 +3,49 @@
 namespace App\Http\Controllers;
 
 use App\Models\Membership;
-use App\Services\MembershipService;
 use Illuminate\Http\Request;
+use App\Services\MembershipService;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Log;
 
-class MembershipController extends Controller
+
+class MembershipController extends Controller implements HasMiddleware
 {
     protected $membershipService;
 
     public function __construct(MembershipService $membershipService)
     {
         $this->membershipService = $membershipService;
+        // $this->middleware('permission:membership-list')->only(['index']);
     }
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(
+                middleware: 'permission:membership-list',
+                only: ['index']
+            ),
+            new Middleware(
+                middleware: 'permission:membership-create',
+                only: ['create', 'store']
+            ),
+            new Middleware(
+                middleware: 'permission:membership-edit',
+                only: ['edit', 'update']
+            ),
+            new Middleware(
+                middleware: 'permission:membership-delete',
+                only: ['destroy']
+            ),
+            // 'permission:membership-list' => ['only' => ['index']],
+            // 'permission:membership-create' => ['only' => ['create', 'store']],
+            // 'permission:membership-edit' => ['only' => ['edit', 'update']],
+            // 'permission:membership-delete' => ['only' => ['destroy']],
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
