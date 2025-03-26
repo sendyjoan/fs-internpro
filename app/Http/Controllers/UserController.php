@@ -25,9 +25,8 @@ class UserController extends Controller
     {
         $per_page = $request->input('per_page', 10);
         $search = $request->input('search', '');
-        $users = User::where('name', 'like', '%' . $search . '%')->paginate($per_page);
+        $users = User::with('school')->where('name', 'like', '%' . $search . '%')->paginate($per_page);
         return view('modules.users.index', compact('users', 'per_page'));
-        // return view('modules.users.index');
     }
 
     public function create()
