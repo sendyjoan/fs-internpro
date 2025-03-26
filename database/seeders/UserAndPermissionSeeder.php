@@ -32,6 +32,7 @@ class UserAndPermissionSeeder extends Seeder
             'school-create',
             'school-edit',
             'school-delete',
+            'school-adjustment',
             'membership-list',
             'membership-create',
             'membership-edit',
