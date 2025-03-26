@@ -10,6 +10,7 @@
             @if (auth()->user()->can('dashboard-access'))
               <li class="menu-header">Dashboard</li>
               <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}"><a href="{{ route('dashboard') }}" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a></li>
+              <li class="menu-header">Master Data</li>
             @endif
 
             @if (auth()->user()->can('permission-list') || auth()->user()->can('role-list') || auth()->user()->can('user-list') || auth()->user()->can('membership-list') || auth()->user()->can('school-list') || auth()->user()->can('dashboard-system'))
