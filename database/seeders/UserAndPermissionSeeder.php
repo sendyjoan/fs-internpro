@@ -38,7 +38,11 @@ class UserAndPermissionSeeder extends Seeder
             'membership-edit',
             'membership-delete',
             'school-adjustment-create',
-            'dashboard-system'
+            'dashboard-system',
+            'major-list',
+            'major-create',
+            'major-edit',
+            'major-delete',
         ];
 
         foreach ($permissions as $permission) {
@@ -57,6 +61,11 @@ class UserAndPermissionSeeder extends Seeder
 
         $schoolAdministrator = Role::create(['name' => 'School Administrator']);
         $permissions = Permission::where('name', 'dashboard-access')->get();
+        foreach ($permissions as $permission) {
+            $schoolAdministrator->givePermissionTo($permission);
+        }
+        // get permission like major
+        $permissions = Permission::where('name', 'like', 'major%')->get();
         foreach ($permissions as $permission) {
             $schoolAdministrator->givePermissionTo($permission);
         }

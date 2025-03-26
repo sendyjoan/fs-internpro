@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -31,6 +32,16 @@ class AuthenticatedSessionController extends Controller
 
         Alert::success('Welcome!', 'You have been logged in.');
 
+        // data array 
+        $data = [
+            'user_id' => Auth::user()->id,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'login_time' => now(),
+        ];
+        // log the login activity
+        Log::info('User logged in', $data);
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
@@ -39,6 +50,12 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        Log::info('User logged out', [
+            'user_id' => Auth::user()->id,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'logout_time' => now(),
+        ]);
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

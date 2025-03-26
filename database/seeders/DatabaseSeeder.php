@@ -27,12 +27,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             UserAndPermissionSeeder::class,
             MembershipSeeder::class,
+            SchoolSeeder::class,
+            AdministratorSeeder::class,
         ]);
-
-        if (env('APP_ENV') == 'testing') {
-            $this->call([
-                SchoolSeeder::class
-            ]);
-        }
     }
 }

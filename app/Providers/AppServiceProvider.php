@@ -4,14 +4,16 @@ namespace App\Providers;
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\Eloquent\UserRepository;
+use App\Repositories\Eloquent\MajorRepository;
 use App\Repositories\Eloquent\SchoolRepository;
 use App\Repositories\Eloquent\MembershipRepository;
+use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\MajorRepositoryInterface;
 use App\Repositories\Contracts\SchoolRepositoryInterface;
 use App\Repositories\Contracts\MembershipRepositoryInterface;
 use App\Repositories\Eloquent\SchoolMembershipSummaryRepository;
 use App\Repositories\Contracts\SchoolMembershipSummaryRepositoryInterfaces;
-use App\Repositories\Contracts\UserRepositoryInterface;
-use App\Repositories\Eloquent\UserRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(MembershipRepositoryInterface::class, MembershipRepository::class);
         $this->app->bind(SchoolMembershipSummaryRepositoryInterfaces::class, SchoolMembershipSummaryRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(MajorRepositoryInterface::class, MajorRepository::class);
     }
 
     /**

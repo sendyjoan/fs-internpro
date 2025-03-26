@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MajorController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MembershipController;
@@ -52,6 +53,7 @@ Route::middleware('auth')->group(function () {
     
     Route::resource('/users', UserController::class);
     Route::resource('schools', SchoolController::class);
+    Route::resource('majors', MajorController::class);
     Route::get('schools/{school}/adjustment', [SchoolController::class, 'adjustment'])->name('schools.adjustment');
     Route::post('schools/{school}/adjustment', [SchoolController::class, 'saveAdjustment'])->name('schools.save-adjustment');
     Route::resource('memberships', MembershipController::class);
