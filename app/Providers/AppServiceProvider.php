@@ -10,6 +10,8 @@ use App\Repositories\Contracts\SchoolRepositoryInterface;
 use App\Repositories\Contracts\MembershipRepositoryInterface;
 use App\Repositories\Eloquent\SchoolMembershipSummaryRepository;
 use App\Repositories\Contracts\SchoolMembershipSummaryRepositoryInterfaces;
+use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Eloquent\UserRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SchoolRepositoryInterface::class, SchoolRepository::class);
         $this->app->bind(MembershipRepositoryInterface::class, MembershipRepository::class);
         $this->app->bind(SchoolMembershipSummaryRepositoryInterfaces::class, SchoolMembershipSummaryRepository::class);
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
     }
 
     /**

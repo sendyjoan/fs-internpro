@@ -34,8 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-
+    
     // route group access control
     Route::prefix('access-control')->group(function () {
         Route::get('permission', [AccessControlController::class, 'indexPermission'])->name('access-control.permission-index');
@@ -50,7 +49,8 @@ Route::middleware('auth')->group(function () {
         Route::get('user-to-role/{user}/update', [AccessControlController::class, 'updateUserToRole'])->name('access-control.user-to-role-update');
         Route::post('user-to-role/{user}', [AccessControlController::class, 'saveUserToRole'])->name('access-control.user-to-role-save');
     });
-
+    
+    Route::resource('/users', UserController::class);
     Route::resource('schools', SchoolController::class);
     Route::get('schools/{school}/adjustment', [SchoolController::class, 'adjustment'])->name('schools.adjustment');
     Route::post('schools/{school}/adjustment', [SchoolController::class, 'saveAdjustment'])->name('schools.save-adjustment');

@@ -26,7 +26,7 @@
                         </form>
                     </div>
                     <div class="col-md-4 text-right">
-                        <a type="button" class="btn btn-sm btn-primary text-white" data-toggle="modal" data-target="#createModal">Create</a>
+                        <a href="{{route('users.create')}}" type="button" class="btn btn-sm btn-primary text-white">Create</a>
                     </div>
                 </div>
             </div>
