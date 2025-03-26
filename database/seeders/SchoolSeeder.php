@@ -21,7 +21,6 @@ class SchoolSeeder extends Seeder
             'phone' => '081222333444',
             'address' => 'Trenggalek',
             'contact' => 'Bu Mariska',
-            'created_by' => $admin->id
         ]);
     }
 }
