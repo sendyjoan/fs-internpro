@@ -43,6 +43,8 @@ class UserAndPermissionSeeder extends Seeder
             'major-create',
             'major-edit',
             'major-delete',
+            'major-import',
+            'major-export',
         ];
 
         foreach ($permissions as $permission) {

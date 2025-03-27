@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MajorExport;
 use App\Exports\TemplateMajorExport;
+use App\Imports\MajorImport;
 use App\Services\MajorService;
 use App\Services\SchoolService;
 use Illuminate\Support\Facades\DB;
@@ -93,7 +94,7 @@ class MajorController extends Controller implements HasMiddleware
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            // 'school' => 'required',
+            'school' => 'exists:schools,id',
         ]);
         try {
             DB::beginTransaction();
@@ -192,11 +193,34 @@ class MajorController extends Controller implements HasMiddleware
 
     public function exportMajor() 
     {
-        return Excel::download(new MajorExport, 'Export_Major_' . now()->format('Y_m_d_H_i_s') . '.xlsx');
+        try {
+            Log::info('Exporting majors');
+            return Excel::download(new MajorExport, 'Export_Major_' . now()->format('Y_m_d_H_i_s') . '.xlsx');
+        } catch (Exception $e) {
+            Log::error('Error exporting majors: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error exporting majors: ' . $e->getMessage());
+        }
     }
 
     public function templateMajor() 
     {
-        return Excel::download(new TemplateMajorExport, 'Template_Major_' . now()->format('Y_m_d_H_i_s') . '.xlsx');
+        try {
+            Log::info('Exporting major template');
+            return Excel::download(new TemplateMajorExport, 'Template_Major_' . now()->format('Y_m_d_H_i_s') . '.xlsx');
+        } catch (Exception $e) {
+            Log::error('Error exporting major template: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error exporting major template: ' . $e->getMessage());
+        }
+    }
+
+    public function importMajor(Request $request){
+        // Validate incoming request data
+        $request->validate([
+            'file' => 'required|max:2048',
+        ]);
+  
+        Excel::import(new MajorImport, $request->file('file'));
+        Alert::toast('Success Import', 'success');
+        return back()->with('success', 'Users imported successfully.');
     }
 }

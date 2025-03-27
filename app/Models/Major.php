@@ -21,7 +21,7 @@ class Major extends Model
         'deleted_by',
     ];
 
-    public function codeGenerator()
+    public static function codeGenerator()
     {
         // Generate a unique code for the major
         // Assuming the ID is auto-incrementing and starts from 1

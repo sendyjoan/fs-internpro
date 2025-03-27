@@ -22,8 +22,11 @@
                     <div class="col-md-4 text-right">
                         @if (auth()->user()->can('major-create'))
                             <a href="{{ route('majors.create') }}" class="btn btn-sm btn-primary text-white">Create</a>
+                        @endif
+                        @if (auth()->user()->can('major-import'))
                             <button type="button" class="btn btn-warning import" data-toggle="modal" data-target="#importModal">Import</button>
-                            {{-- <a href="#" class="btn btn-sm btn-warning text-white" data-bs-toggle="modal" data-bs-target="#importModal">Import</a> --}}
+                        @endif
+                        @if (auth()->user()->can('major-export'))
                             <a href="{{ route('export-major') }}" class="btn btn-sm btn-info text-white">Export</a>
                         @endif
                     </div>
@@ -81,6 +84,7 @@
                     </tbody>
                 </table>
             </div>
+            @if (auth()->user()->can('major-import'))
             <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -91,7 +95,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="{{ route('majors.store') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('import-major') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-12">
@@ -105,15 +109,16 @@
                                     <p>Unknow the template? <a href='{{ route('template-major') }}'>Click here to download!</a></p>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer bg-whitesmoke br">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Import</button>
-                        </div>
+                            </div>
+                            <div class="modal-footer bg-whitesmoke br">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Import</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
+            @endif
         </div>
     </div>
 </section>

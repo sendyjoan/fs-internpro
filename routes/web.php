@@ -62,6 +62,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('export-import')->group(function () {
         Route::get('export-major', [MajorController::class, 'exportMajor'])->name('export-major');
         Route::get('template-major', [MajorController::class, 'templateMajor'])->name('template-major');
+        Route::post('import-major', [MajorController::class, 'importMajor'])->name('import-major');
     });
 
 });
