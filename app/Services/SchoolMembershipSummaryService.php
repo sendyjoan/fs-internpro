@@ -29,6 +29,11 @@ class SchoolMembershipSummaryService
         return $this->schoolMembershipSummaryRepositoryInterfaces->findById($id);
     }
 
+    public function findBySchoolId($id)
+    {
+        return $this->schoolMembershipSummaryRepositoryInterfaces->getSchoolMembershipSummaryBySchoolId($id);
+    }
+
     public function create(array $data)
     {
         try {
