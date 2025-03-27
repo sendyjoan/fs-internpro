@@ -23,7 +23,7 @@ class Major extends Model
     {
         // Generate a unique code for the major
         // Assuming the ID is auto-incrementing and starts from 1
-        $major = self::orderBy('code', 'desc')->first();
+        $major = self::orderBy('code', 'desc')->withTrashed()->first();
         if ($major) {
             $lastCode = $major->code;
             $lastNumber = (int) substr($lastCode, 4); // Ambil angka setelah "MJR"

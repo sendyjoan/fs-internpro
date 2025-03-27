@@ -8,15 +8,21 @@ use Illuminate\Http\Request;
 use App\Services\MajorService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Routing\Controllers\Middleware;
+use App\Services\SchoolMembershipSummaryService;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
 class MajorController extends Controller implements HasMiddleware
 {
     protected $majorService;
-    public function __construct(MajorService $majorService)
+    protected $schoolMember;
+
+    public function __construct(MajorService $majorService, SchoolMembershipSummaryService $schoolMember)
     {
         $this->majorService = $majorService;
+        $this->schoolMember = $schoolMember;
     }
 
     public static function middleware(): array
@@ -78,10 +84,23 @@ class MajorController extends Controller implements HasMiddleware
             'name' => 'required|string|max:255',
         ]);
         try {
+            DB::beginTransaction();
             Log::info('Storing new major');
-            $this->majorService->createMajor($request->all());
+            $major =  $this->majorService->createMajor($request->all());
+            Log::info('Major created successfully');
+            Log::info('Use Major Capacity');
+            $increase = $this->schoolMember->increaseMajor(Auth::user()->school_id);
+            if(!$increase || $increase == null){
+                DB::rollBack();
+                Log::error('Error increasing major capacity');
+                Alert::toast('Error increasing major capacity', 'error');
+                return redirect()->back()->with('error', 'Error increasing major capacity');
+            }
+            Log::info('Major Capacity increased successfully');
+            DB::commit();
             return redirect()->route('majors.index')->with('success', 'Major created successfully');
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error('Error creating major: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Error creating major: ' . $e->getMessage());
         }
@@ -144,6 +163,10 @@ class MajorController extends Controller implements HasMiddleware
         try{
             Log::info('Deleting Major', $major->toArray());
             $this->majorService->deleteMajor($major->id);
+            Log::info('Major deleted successfully');
+            Log::info('Decrease Major Capacity');
+            $decrease = $this->schoolMember->decreaseMajor(Auth::user()->school_id);
+            Log::info('Major Capacity decreased successfully', $decrease->toArray());
             return redirect()->route('majors.index')->with('success', 'Major deleted successfully');
         }catch (Exception $e){
             Log::error('Error deleting major: ' . $e->getMessage());
