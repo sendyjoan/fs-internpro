@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
-use App\Repositories\Contracts\MajorRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\Contracts\MajorRepositoryInterface;
 
 class MajorService
 {
@@ -54,10 +55,14 @@ class MajorService
             Log::info('Creating major', ['data' => $data]);
             $data['created_by'] = Auth::user()->id;
             $data['updated_by'] = Auth::user()->id;
+            $data['school_id'] = Auth::user()->school_id;
+            DB::beginTransaction();
             $result = $this->majorRepository->create($data);
             Log::info('Major created successfully', ['major' => $result]);
+            DB::commit();
             return $result;
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error('Error creating major: ' . $e->getMessage());
             return null;
         }
@@ -67,11 +72,14 @@ class MajorService
     {
         try {
             Log::info('Updating major', ['id' => $id]);
+            DB::beginTransaction();
             $data['updated_by'] = Auth::user()->id;
             $result = $this->majorRepository->update($id, $data);
             Log::info('Major updated successfully', ['major' => $result]);
+            DB::commit();
             return $result;
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error('Error updating major: ' . $e->getMessage(), ['id' => $id]);
             return null;
         }
@@ -81,15 +89,20 @@ class MajorService
     {
         try {
             Log::info('Deleting major', ['id' => $id]);
+            DB::beginTransaction();
             $major = $this->majorRepository->findById($id);
             if (!$major) {
                 Log::error('Major not found', ['id' => $id]);
                 return null;
             }
-            $major->delete();
+            $data['deleted_by'] = Auth::user()->id;
+            $major = $this->majorRepository->update($id, $data);
+            $major = $this->majorRepository->delete($id);
             Log::info('Major deleted successfully', ['id' => $id]);
+            DB::commit();
             return true;
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error('Error deleting major: ' . $e->getMessage(), ['id' => $id]);
             return null;
         }

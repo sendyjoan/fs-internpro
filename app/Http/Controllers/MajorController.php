@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Major;
 use Illuminate\Http\Request;
 use App\Services\MajorService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -59,7 +60,13 @@ class MajorController extends Controller implements HasMiddleware
      */
     public function create()
     {
-        dd('create');
+        try{
+            Log::info('Showing Major create form');
+            return view('modules.majors.create');
+        }catch (Exception $e){
+            Log::error('Error fetching majors for create form: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error fetching majors for create form: '.$e->getMessage());
+        }
     }
 
     /**
@@ -67,7 +74,17 @@ class MajorController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
-        dd('store');
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+        try {
+            Log::info('Storing new major');
+            $this->majorService->createMajor($request->all());
+            return redirect()->route('majors.index')->with('success', 'Major created successfully');
+        } catch (Exception $e) {
+            Log::error('Error creating major: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error creating major: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -75,7 +92,14 @@ class MajorController extends Controller implements HasMiddleware
      */
     public function show(Major $major)
     {
-        dd('show');
+        try {
+            Log::info('Showing Major details');
+            $major = $this->majorService->getMajorById($major->id);
+            return view('modules.majors.show', compact('major'));
+        } catch (Exception $e) {
+            Log::error('Error fetching major details: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error fetching major details: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -83,7 +107,14 @@ class MajorController extends Controller implements HasMiddleware
      */
     public function edit(Major $major)
     {
-        dd('edit');
+        try{
+            Log::info('Showing Major edit form');
+            $major = $this->majorService->getMajorById($major->id);
+            return view('modules.majors.edit', compact('major'));
+        }catch (Exception $e){
+            Log::error('Error fetching majors for edit form: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error fetching majors for edit form: '.$e->getMessage());
+        }
     }
 
     /**
@@ -91,7 +122,18 @@ class MajorController extends Controller implements HasMiddleware
      */
     public function update(Request $request, Major $major)
     {
-        dd('update');
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+        try{
+            Log::info('Updating Major');
+            $major = $this->majorService->updateMajor($major->id, $request->all());
+            Log::info('Major updated successfully', $major->toArray());
+            return redirect()->route('majors.index')->with('success', 'Major updated successfully');
+        }catch (Exception $e){
+            Log::error('Error updating major: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error updating major: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -99,6 +141,13 @@ class MajorController extends Controller implements HasMiddleware
      */
     public function destroy(Major $major)
     {
-        dd('destroy');
+        try{
+            Log::info('Deleting Major', $major->toArray());
+            $this->majorService->deleteMajor($major->id);
+            return redirect()->route('majors.index')->with('success', 'Major deleted successfully');
+        }catch (Exception $e){
+            Log::error('Error deleting major: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error deleting major: ' . $e->getMessage());
+        }
     }
 }
