@@ -26,13 +26,13 @@ class Major extends Model
         $major = self::orderBy('code', 'desc')->first();
         if ($major) {
             $lastCode = $major->code;
-            $lastNumber = (int) substr($lastCode, 3); // Ambil angka setelah "MJR"
+            $lastNumber = (int) substr($lastCode, 4); // Ambil angka setelah "MJR"
             $newNumber = $lastNumber + 1;
         } else {
             $newNumber = 1;
         }
         
-        $code = 'MJR' . str_pad($newNumber, 6, '0', STR_PAD_LEFT);
+        $code = 'MJR-' . str_pad($newNumber, 6, '0', STR_PAD_LEFT);
         return $code;
     }
 }

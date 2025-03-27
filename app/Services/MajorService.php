@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
-use App\Repositories\Contracts\MajorRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\Contracts\MajorRepositoryInterface;
 
 class MajorService
 {
@@ -54,10 +55,14 @@ class MajorService
             Log::info('Creating major', ['data' => $data]);
             $data['created_by'] = Auth::user()->id;
             $data['updated_by'] = Auth::user()->id;
+            $data['school_id'] = Auth::user()->school_id;
+            DB::beginTransaction();
             $result = $this->majorRepository->create($data);
             Log::info('Major created successfully', ['major' => $result]);
+            DB::commit();
             return $result;
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error('Error creating major: ' . $e->getMessage());
             return null;
         }

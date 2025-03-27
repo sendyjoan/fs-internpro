@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Major;
 use Illuminate\Http\Request;
 use App\Services\MajorService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -59,7 +60,13 @@ class MajorController extends Controller implements HasMiddleware
      */
     public function create()
     {
-        dd('create');
+        try{
+            Log::info('Showing Major create form');
+            return view('modules.majors.create');
+        }catch (Exception $e){
+            Log::error('Error fetching majors for create form: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error fetching majors for create form: '.$e->getMessage());
+        }
     }
 
     /**
@@ -67,7 +74,17 @@ class MajorController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
-        dd('store');
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+        try {
+            Log::info('Storing new major');
+            $this->majorService->createMajor($request->all());
+            return redirect()->route('majors.index')->with('success', 'Major created successfully');
+        } catch (Exception $e) {
+            Log::error('Error creating major: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error creating major: ' . $e->getMessage());
+        }
     }
 
     /**

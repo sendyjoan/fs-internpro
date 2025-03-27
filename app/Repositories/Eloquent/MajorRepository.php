@@ -60,9 +60,8 @@ class MajorRepository implements MajorRepositoryInterface
         try {
             Log::info('Creating major in repository with data', $data);
             $data['code'] = $this->major->codeGenerator();
-            $data['school_id'] = Auth::user()->school_id;
             $major = $this->major->create($data);
-            Log::info('Major created successfully ' , $major->id);
+            Log::info('Major created successfully', $major->toArray());
             return $major;
         } catch (\Exception $e) {
             Log::error('Error creating major: ' . $e->getMessage());
