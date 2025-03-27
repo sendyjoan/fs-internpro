@@ -90,7 +90,7 @@ class MajorController extends Controller implements HasMiddleware
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'school' => 'required',
+            // 'school' => 'required',
         ]);
         try {
             DB::beginTransaction();
