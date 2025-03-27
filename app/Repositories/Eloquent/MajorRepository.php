@@ -20,7 +20,11 @@ class MajorRepository implements MajorRepositoryInterface
     {
         try{
             Log::info('Fetching all majors from repository');
-            $majors = $this->major->where('school_id', Auth::user()->school_id)->get();
+            if (Auth::user()->hasRole('Super Administrator')) {
+                $majors = $this->major->all();
+            } else {
+                $majors = $this->major->where('created_by', Auth::user()->id)->get();
+            }
             Log::info('Fetched all majors successfully');
             return $majors;
         } catch (\Exception $e) {
