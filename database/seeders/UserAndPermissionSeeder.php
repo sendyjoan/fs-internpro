@@ -45,6 +45,12 @@ class UserAndPermissionSeeder extends Seeder
             'major-delete',
             'major-import',
             'major-export',
+            'class-list',
+            'class-create',
+            'class-edit',
+            'class-delete',
+            'class-import',
+            'class-export',
         ];
 
         foreach ($permissions as $permission) {
@@ -68,6 +74,11 @@ class UserAndPermissionSeeder extends Seeder
         }
         // get permission like major
         $permissions = Permission::where('name', 'like', 'major%')->get();
+        foreach ($permissions as $permission) {
+            $schoolAdministrator->givePermissionTo($permission);
+        }
+
+        $permissions = Permission::where('name', 'like', 'class%')->get();
         foreach ($permissions as $permission) {
             $schoolAdministrator->givePermissionTo($permission);
         }

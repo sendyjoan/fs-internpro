@@ -3,13 +3,14 @@
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MajorController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\AccessControlController;
 use App\Http\Controllers\AdminDashboardController;
-use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     // return view('welcome');
@@ -56,6 +57,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/users', UserController::class);
     Route::resource('schools', SchoolController::class);
     Route::resource('majors', MajorController::class);
+    Route::resource('classes', KelasController::class);
     // Route::get('majors/export', [MajorController::class, 'export'])->name('export-major');
     Route::get('schools/{school}/adjustment', [SchoolController::class, 'adjustment'])->name('schools.adjustment');
     Route::post('schools/{school}/adjustment', [SchoolController::class, 'saveAdjustment'])->name('schools.save-adjustment');
