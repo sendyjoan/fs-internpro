@@ -32,7 +32,7 @@ class MajorRepository implements MajorRepositoryInterface
     public function findById($id)
     {
         try{
-            Log::info('Fetching major with ID', $id);
+            Log::info('Fetching major with ID'. $id);
             $major = $this->major->findOrFail($id);
             Log::info('Fetched major successfully');
             return $major;
@@ -72,11 +72,13 @@ class MajorRepository implements MajorRepositoryInterface
     public function update($id, array $data)
     {
         try {
-            Log::info('Updating major with ID ' , $id);
+            Log::info('Searching for major with ID ' . $id);
             $major = $this->findById($id);
+            Log::info('Major found' , $major->toArray());
+            Log::info('Updating major with ID ' . $id);
             $data['updated_by'] = Auth::user()->id;
             $major->update($data);
-            Log::info('Major updated successfully ' , $major->id);
+            Log::info('Major updated successfully ' , $major->toArray());
             return $major;
         } catch (\Exception $e) {
             Log::error('Error updating major: ' . $e->getMessage());
@@ -87,12 +89,12 @@ class MajorRepository implements MajorRepositoryInterface
     public function delete($id)
     {
         try {
-            Log::info('Deleting major with ID ' , $id);
+            Log::info('Deleting major with ID ' . $id);
             $major = $this->findById($id);
             $major->deleted_by = Auth::user()->id;
             $major->save();
             $major->delete();
-            Log::info('Major deleted successfully ' , $major->id);
+            Log::info('Major deleted successfully ');
             return true;
         } catch (\Exception $e) {
             Log::error('Error deleting major: ' . $e->getMessage());
