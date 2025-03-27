@@ -35,6 +35,12 @@
                         <th width="30%">Name Major</th>
                         <td>{{ $major->name }}</td>
                     </tr>
+                    @if (Auth::user()->hasRole('Super Administrator'))
+                    <tr>
+                        <th width="30%">School Name</th>
+                        <td>{{ $major->school->name }}</td>
+                    </tr>
+                    @endif
                 </table>
             </div>
         </div>

@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Repositories\Contracts\UserRepositoryInterface;
 
 class UserRepository implements UserRepositoryInterface
@@ -29,6 +30,7 @@ class UserRepository implements UserRepositoryInterface
     {
         try {
             Log::info('Creating user in Repository with data', $data);
+            $data['created_by'] = Auth::user()->id;
             return $this->user->create($data);
         } catch (\Exception $e) {
             Log::error('Error creating user: ' . $e->getMessage());
@@ -38,9 +40,16 @@ class UserRepository implements UserRepositoryInterface
 
     public function update($id, array $data)
     {
-        $user = $this->findById($id);
-        $user->update($data);
-        return $user;
+        try {
+            $user = $this->findById($id);
+            $data['updated_by'] = Auth::user()->id;
+            $user->update($data);
+            Log::info('User updated successfully in Repository', ['id' => $id, 'data' => $data]);
+            return $user;
+        } catch (\Exception $e) {
+            Log::error('Error updating user: ' . $e->getMessage(), ['id' => $id, 'data' => $data]);
+            throw $e;
+        }
     }
 
     public function delete($id)

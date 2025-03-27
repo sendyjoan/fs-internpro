@@ -55,7 +55,14 @@ class MajorService
             Log::info('Creating major', ['data' => $data]);
             $data['created_by'] = Auth::user()->id;
             $data['updated_by'] = Auth::user()->id;
-            $data['school_id'] = Auth::user()->school_id;
+            // dd($data);
+            if (Auth::user()->hasRole('Super Administrator')) {
+                $data['school_id'] = $data['school'];
+            }
+            else{
+                $data['school_id'] = Auth::user()->school_id;
+            }
+            unset($data['school']);
             DB::beginTransaction();
             $result = $this->majorRepository->create($data);
             Log::info('Major created successfully', ['major' => $result]);

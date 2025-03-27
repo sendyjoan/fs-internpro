@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('majors', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('code')->unique();
+            $table->string('code')->nullable(false)->unique();
             $table->string('name');
             $table->uuid('school_id');
             $table->foreign('school_id')->references('id')->on('schools')->onDelete('cascade');
