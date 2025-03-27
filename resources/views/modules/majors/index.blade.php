@@ -22,9 +22,9 @@
                     <div class="col-md-4 text-right">
                         @if (auth()->user()->can('major-create'))
                             <a href="{{ route('majors.create') }}" class="btn btn-sm btn-primary text-white">Create</a>
-                            <button type="button" class="btn btn-primary import" data-toggle="modal" data-target="#importModal">Launch demo modal</button>
+                            <button type="button" class="btn btn-warning import" data-toggle="modal" data-target="#importModal">Import</button>
                             {{-- <a href="#" class="btn btn-sm btn-warning text-white" data-bs-toggle="modal" data-bs-target="#importModal">Import</a> --}}
-                            <a href="#" class="btn btn-sm btn-info text-white">Export</a>
+                            <a href="{{ route('export-major') }}" class="btn btn-sm btn-info text-white">Export</a>
                         @endif
                     </div>
                 </div>
@@ -102,7 +102,7 @@
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                    <p>Unknow the template? <a href='#'>Click here to download!</a></p>
+                                    <p>Unknow the template? <a href='{{ route('template-major') }}'>Click here to download!</a></p>
                                     </div>
                                 </div>
                             </form>

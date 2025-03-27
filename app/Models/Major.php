@@ -10,6 +10,8 @@ class Major extends Model
 {
     use SoftDeletes, HasUuids;
 
+    protected $primaryKey = 'id';
+
     protected $fillable = [
         'code',
         'name',
