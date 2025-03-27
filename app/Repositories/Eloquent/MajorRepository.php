@@ -21,7 +21,7 @@ class MajorRepository implements MajorRepositoryInterface
         try{
             Log::info('Fetching all majors from repository');
             if (Auth::user()->hasRole('Super Administrator')) {
-                $majors = $this->major->all();
+                $majors = $this->major->with('school')->get();
             } else {
                 $majors = $this->major->where('created_by', Auth::user()->id)->get();
             }

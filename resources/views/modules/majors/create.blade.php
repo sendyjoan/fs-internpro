@@ -36,6 +36,20 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            @if (Auth::user()->hasRole('Super Administrator'))
+                            <div class="form-group">
+                                <label for="school">School</label>
+                                <select class="form-control @error('school') is-invalid @enderror" id="school" name="school">
+                                    <option value="">Select School</option>
+                                    @foreach ($schools as $school)
+                                        <option value="{{ $school->id }}" {{ old('school') == $school->id ? 'selected' : '' }}>{{ $school->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error ('school')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            @endif
                         </div>
                         <div class="col-md-12 text-right">
                             <a href="{{ route('majors.index') }}" class="btn btn-secondary">Back</a>

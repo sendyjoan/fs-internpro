@@ -12,17 +12,20 @@ use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Routing\Controllers\Middleware;
 use App\Services\SchoolMembershipSummaryService;
+use App\Services\SchoolService;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
 class MajorController extends Controller implements HasMiddleware
 {
     protected $majorService;
     protected $schoolMember;
+    protected $schoolService;
 
-    public function __construct(MajorService $majorService, SchoolMembershipSummaryService $schoolMember)
+    public function __construct(MajorService $majorService, SchoolMembershipSummaryService $schoolMember, SchoolService $schoolService)
     {
         $this->majorService = $majorService;
         $this->schoolMember = $schoolMember;
+        $this->schoolService = $schoolService;
     }
 
     public static function middleware(): array
@@ -68,7 +71,12 @@ class MajorController extends Controller implements HasMiddleware
     {
         try{
             Log::info('Showing Major create form');
-            return view('modules.majors.create');
+            if (Auth::user()->hasRole('Super Administrator')){
+                $schools = $this->schoolService->getAllSchools();
+                return view('modules.majors.create', compact('schools'));
+            }else{
+                return view('modules.majors.create');
+            }
         }catch (Exception $e){
             Log::error('Error fetching majors for create form: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Error fetching majors for create form: '.$e->getMessage());
@@ -82,6 +90,7 @@ class MajorController extends Controller implements HasMiddleware
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'school' => 'required',
         ]);
         try {
             DB::beginTransaction();
@@ -89,7 +98,11 @@ class MajorController extends Controller implements HasMiddleware
             $major =  $this->majorService->createMajor($request->all());
             Log::info('Major created successfully');
             Log::info('Use Major Capacity');
-            $increase = $this->schoolMember->increaseMajor(Auth::user()->school_id);
+            if (Auth::user()->hasRole('Super Administrator')){
+                $increase = $this->schoolMember->increaseMajor($request->school);
+            }else{
+                $increase = $this->schoolMember->increaseMajor(Auth::user()->school_id);
+            }
             if(!$increase || $increase == null){
                 DB::rollBack();
                 Log::error('Error increasing major capacity');

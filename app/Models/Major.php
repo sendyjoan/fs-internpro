@@ -35,4 +35,9 @@ class Major extends Model
         $code = 'MJR-' . str_pad($newNumber, 6, '0', STR_PAD_LEFT);
         return $code;
     }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
 }

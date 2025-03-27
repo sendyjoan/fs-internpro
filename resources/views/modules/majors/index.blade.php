@@ -34,6 +34,9 @@
                                 <th>#</th>
                                 <th>Code</th>
                                 <th>Major Name</th>
+                                @if (Auth::user()->hasRole('Super Administrator'))
+                                <th>School Name</th>
+                                @endif
                                 @if (auth()->user()->can('major-edit') || auth()->user()->can('major-delete'))
                                 <th>Action</th>
                                 @endif
@@ -45,6 +48,9 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $major->code }}</td>
                                     <td>{{ $major->name }}</td>
+                                    @if (Auth::user()->hasRole('Super Administrator'))
+                                        <td>{{ $major->school->name }}</td>
+                                    @endif
                                     @if (auth()->user()->can('major-edit') || auth()->user()->can('major-delete'))
                                     <td>
                                         @if (auth()->user()->can('major-list'))
