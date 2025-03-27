@@ -10,12 +10,12 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
   <!-- CSS Libraries -->
-  <link rel="stylesheet" href="{{asset('node_modules/bootstrap-daterangepicker/daterangepicker.css')}}">
+  {{-- <link rel="stylesheet" href="{{asset('node_modules/bootstrap-daterangepicker/daterangepicker.css')}}">
   <link rel="stylesheet" href="{{asset('node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css')}}">
   <link rel="stylesheet" href="{{asset('node_modules/select2/dist/css/select2.min.css')}}">
   <link rel="stylesheet" href="{{asset('node_modules/selectric/public/selectric.css')}}">
   <link rel="stylesheet" href="{{asset('node_modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css')}}">
-  <link rel="stylesheet" href="{{asset('node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css')}}">
+  <link rel="stylesheet" href="{{asset('node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css')}}"> --}}
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
@@ -56,7 +56,7 @@
   <script src="{{asset('assets/js/stisla.js')}}"></script>
   
   <!-- JS Libraies -->
-  <script src="{{asset('node_modules/select2/dist/js/select2.full.min.js')}}"></script>
+  {{-- <script src="{{asset('node_modules/select2/dist/js/select2.full.min.js')}}"></script>
   <script src="{{asset('node_modules/cleave.js/dist/cleave.min.js')}}"></script>
   <script src="{{asset('node_modules/cleave.js/dist/addons/cleave-phone.us.js')}}"></script>
   <script src="{{asset('node_modules/jquery-pwstrength/jquery.pwstrength.min.js')}}"></script>
@@ -64,7 +64,7 @@
   <script src="{{asset('node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js')}}"></script>
   <script src="{{asset('node_modules/bootstrap-timepicker/js/bootstrap-timepicker.min.js')}}"></script>
   <script src="{{asset('node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js')}}"></script>
-  <script src="{{asset('node_modules/selectric/public/jquery.selectric.min.js')}}"></script>
+  <script src="{{asset('node_modules/selectric/public/jquery.selectric.min.js')}}"></script> --}}
 
   <!-- Template JS File -->
   <script src="{{asset('assets/js/scripts.js')}}"></script>
@@ -72,5 +72,8 @@
 
   <!-- Page Specific JS File -->
   <script src="{{asset('assets/js/page/forms-advanced-forms.js')}}"></script>
+
+  <!-- Page Specific JS File -->
+  <script src="{{ asset('assets/js/page/bootstrap-modal.js') }}"></script>
 </body>
 </html>

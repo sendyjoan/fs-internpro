@@ -5,14 +5,18 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\Major;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MajorExport;
+use App\Exports\TemplateMajorExport;
+use App\Imports\MajorImport;
 use App\Services\MajorService;
+use App\Services\SchoolService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Routing\Controllers\Middleware;
 use App\Services\SchoolMembershipSummaryService;
-use App\Services\SchoolService;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
 class MajorController extends Controller implements HasMiddleware
@@ -90,7 +94,7 @@ class MajorController extends Controller implements HasMiddleware
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'school' => 'required',
+            'school' => 'exists:schools,id',
         ]);
         try {
             DB::beginTransaction();
@@ -185,5 +189,38 @@ class MajorController extends Controller implements HasMiddleware
             Log::error('Error deleting major: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Error deleting major: ' . $e->getMessage());
         }
+    }
+
+    public function exportMajor() 
+    {
+        try {
+            Log::info('Exporting majors');
+            return Excel::download(new MajorExport, 'Export_Major_' . now()->format('Y_m_d_H_i_s') . '.xlsx');
+        } catch (Exception $e) {
+            Log::error('Error exporting majors: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error exporting majors: ' . $e->getMessage());
+        }
+    }
+
+    public function templateMajor() 
+    {
+        try {
+            Log::info('Exporting major template');
+            return Excel::download(new TemplateMajorExport, 'Template_Major_' . now()->format('Y_m_d_H_i_s') . '.xlsx');
+        } catch (Exception $e) {
+            Log::error('Error exporting major template: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error exporting major template: ' . $e->getMessage());
+        }
+    }
+
+    public function importMajor(Request $request){
+        // Validate incoming request data
+        $request->validate([
+            'file' => 'required|max:2048',
+        ]);
+  
+        Excel::import(new MajorImport, $request->file('file'));
+        Alert::toast('Success Import', 'success');
+        return back()->with('success', 'Users imported successfully.');
     }
 }

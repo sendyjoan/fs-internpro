@@ -54,10 +54,16 @@ Route::middleware('auth')->group(function () {
     Route::resource('/users', UserController::class);
     Route::resource('schools', SchoolController::class);
     Route::resource('majors', MajorController::class);
+    // Route::get('majors/export', [MajorController::class, 'export'])->name('export-major');
     Route::get('schools/{school}/adjustment', [SchoolController::class, 'adjustment'])->name('schools.adjustment');
     Route::post('schools/{school}/adjustment', [SchoolController::class, 'saveAdjustment'])->name('schools.save-adjustment');
     Route::resource('memberships', MembershipController::class);
     Route::get('admin-dashboard', [AdminDashboardController::class, 'index'])->name('admin-dashboard');
+    Route::prefix('export-import')->group(function () {
+        Route::get('export-major', [MajorController::class, 'exportMajor'])->name('export-major');
+        Route::get('template-major', [MajorController::class, 'templateMajor'])->name('template-major');
+        Route::post('import-major', [MajorController::class, 'importMajor'])->name('import-major');
+    });
 
 });
 
