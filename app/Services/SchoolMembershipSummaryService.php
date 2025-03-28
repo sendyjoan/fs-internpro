@@ -161,4 +161,65 @@ class SchoolMembershipSummaryService
             throw $e;
         }
     }
+
+    public function increaseClass($id){
+        try {
+            Log::info('Increasing class for school membership summary', ['school_id' => $id]);
+            
+            $summary = $this->schoolMembershipSummaryRepositoryInterfaces->getSchoolMembershipSummaryBySchoolId($id);
+            Log::info('School membership summary retrieved', ['summary_id' => $summary->id]);
+            
+            // Get membership by school ID
+            $membership = $this->membershipService->getMembershipById($summary->membership_id);
+            Log::info('Membership retrieved', ['membership_id' => $membership->id]);
+            
+            // Check if classes_used is less than or equal to max_classes in membership
+            if ($summary->classes_used >= $membership->max_classes) {
+                Log::warning('Classes used exceeds or equals max majors', [
+                    'classes_used' => $summary->classes_used,
+                    'max_classes' => $membership->max_classes
+                ]);
+                return null;
+            }
+            
+            $summary->classes_used += 1;
+            $summary->save();
+            Log::info('Class increased successfully', ['summary_id' => $summary->id, 'classes_used' => $summary->classes_used]);
+            
+            return $summary;
+        } catch (\Exception $e) {
+            // Log the error message
+            Log::error('Error increasing classes for school membership summary: ' . $e->getMessage(), ['school_id' => $id]);
+            throw $e;
+        }
+    }
+
+    public function decreaseClass($id){
+        try {
+            Log::info('Decreasing class for school membership summary', ['school_id' => $id]);
+            $summary = $this->schoolMembershipSummaryRepositoryInterfaces->getSchoolMembershipSummaryBySchoolId($id);
+            Log::info('School membership summary retrieved', ['summary_id' => $summary->id]);
+
+            Log::info('Get membership by ID', ['membership_id' => $summary->membership_id]);
+            $membership = $this->membershipService->getMembershipById($summary->membership_id);
+            Log::info('Membership retrieved', ['membership_id' => $membership->id]);
+
+            if ($summary->classes_used <= 0) {
+                Log::warning('Majors used is less than or equals 0', [
+                    'classes_used' => $summary->classes_used,
+                    'max_classes' => $membership->max_classes
+                ]);
+                return null;
+            }
+
+            $summary->classes_used -= 1;
+            $summary->save();
+            Log::info('Class decreased successfully', ['summary_id' => $summary->id, 'classes_used' => $summary->classes_used]);
+            return $summary;
+        } catch (\Exception $e) {
+            // Log the error message
+            Log::error('Error decreasing class for school membership summary: ' . $e->getMessage(), ['school_id' => $id]);
+            throw $e;
+        }
+    }
 }
