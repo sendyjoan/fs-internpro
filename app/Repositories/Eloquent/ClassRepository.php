@@ -45,7 +45,7 @@ class ClassRepository implements ClassRepositoryInterface
             } else {
                 $class = $this->class->with('major')->where('school_id', Auth::user()->school_id)->findOrFail($id);
             }
-            Log::info('Fetched class successfully');
+            Log::info('Fetched class successfully', $class->toArray());
             return $class;
         }catch(Exception $e){
             Log::error('Error fetching detail class: ' . $e->getMessage());
@@ -109,6 +109,7 @@ class ClassRepository implements ClassRepositoryInterface
             Log::info('Updating class in repository with data', $data);
             $class = self::findById($id);
             if (is_object($class)) {
+                $data['updated_by'] = Auth::user()->id;
                 if (Auth::user()->hasRole('Super Administrator')) {
                     $class->update($data);
                 } else {

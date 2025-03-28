@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Services\ClassService;
 use App\Services\MajorService;
 use App\Services\SchoolService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -94,25 +95,67 @@ class KelasController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Kelas $kelas)
+    public function show(string $kelas)
     {
-        dd('show');
+        try{
+            Log::info('Showing class', ['id' => $kelas]);
+            $class = $this->classService->getClassById($kelas);
+            return view('modules.class.show', compact('class'));
+        }catch(Exception $e){
+            Log::error('Error showing class: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error showing class: ' . $e->getMessage());
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Kelas $kelas)
+    public function edit(string $kelas)
     {
-        dd('edit');
+        try{
+            $class = $this->classService->getClassById($kelas);
+            $majors = $this->majorService->getAllMajors();
+            if(Auth::user()->hasRole('Super Administrator')){
+                $schools = $this->schoolService->getAllSchools();
+                return view('modules.class.edit', compact('class', 'majors', 'schools'));
+            }else{
+                return view('modules.class.edit', compact('class', 'majors'));
+            }
+        }catch(Exception $e){
+            Log::error('Error editing class: ' . $e->getMessage());
+            Alert::toast('Error editing class: ' . $e->getMessage(), 'error');
+            return redirect()->back()->with('error', 'Error editing class: ' . $e->getMessage());
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Kelas $kelas)
+    public function update(Request $request, string $kelas)
     {
-        dd('update');
+        try{
+            DB::beginTransaction();
+            Log::info('Updating class', ['id' => $kelas, 'data' => $request->all()]);
+            $data = $request->all();
+            $kelas = $this->classService->updateClass($kelas, $data);
+            if($kelas){
+                Log::info('Class updated successfully', ['class' => $kelas]);
+                Alert::toast('Class updated successfully', 'success');
+                DB::commit();
+                return redirect()->route('classes.index')->with('success', 'Class updated successfully');
+            }else{
+                Log::error('Error updating class: ' . $kelas);
+                Alert::toast('Error updating class: ' . $kelas, 'error');
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Error updating class: ' . $kelas);
+            }
+        }catch(Exception $e){
+            DB::rollBack();
+            dd($e->getMessage());
+            Log::error('Error updating class: ' . $e->getMessage());
+            Alert::toast('Error updating class: ' . $e->getMessage(), 'error');
+            return redirect()->back()->with('error', 'Error updating class: ' . $e->getMessage());
+        }
     }
 
     /**
