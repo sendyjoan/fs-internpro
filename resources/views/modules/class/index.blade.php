@@ -49,28 +49,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($classes as $class)
+                        @foreach ($classes as $class)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $class->code }}</td>
                                 <td>{{ $class->name }}</td>
+                                <td>{{ $class->major->name }}</td>
                                 @if (Auth::user()->hasRole('Super Administrator'))
                                     <td>{{ $class->school->name }}</td>
                                 @endif
                                 @if (auth()->user()->can('class-edit') || auth()->user()->can('class-delete'))
                                     <td>
                                         @if (auth()->user()->can('class-list'))
-                                            <a href="{{ route('classs.show', $class->id) }}" class="btn btn-sm btn-primary detail text-info">
+                                            <a href="{{ route('classes.show', $class->id) }}" class="btn btn-sm btn-primary detail text-info">
                                                 <i class="fas fa-info-circle"></i>
                                             </a>
                                         @endif
                                         @if (auth()->user()->can('class-edit'))
-                                            <a href="{{ route('classs.edit', $class->id) }}" class="btn btn-sm btn-primary update text-warning">
+                                            <a href="{{ route('classes.edit', $class->id) }}" class="btn btn-sm btn-primary update text-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                         @endif
                                         @if (auth()->user()->can('class-delete'))
-                                            <form action="{{ route('classs.destroy', $class->id) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('classes.destroy', $class->id) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-primary delete text-danger">
@@ -81,7 +82,7 @@
                                     </td>
                                 @endif
                             </tr>
-                        @endforeach --}}
+                        @endforeach
                     </tbody>
                 </table>
             </div>

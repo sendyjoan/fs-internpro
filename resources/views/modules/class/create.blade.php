@@ -37,27 +37,27 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="major">Major</label>
-                                <select class="form-control @error('major') is-invalid @enderror" id="major" name="major">
+                                <label for="major_id">Major</label>
+                                <select class="form-control @error('major_id') is-invalid @enderror" id="major_id" name="major_id">
                                     <option value="">Select Major</option>
                                     @foreach ($majors as $major)
-                                        <option value="{{ $major->id }}" {{ old('major') == $major->id ? 'selected' : '' }}>{{ $major->name }}</option>
+                                        <option value="{{ $major->id }}" {{ old('major_id') == $major->id ? 'selected' : '' }}>{{ $major->name }}</option>
                                     @endforeach
                                 </select>
-                                @error ('major')
+                                @error ('major_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             @if (Auth::user()->hasRole('Super Administrator'))
                             <div class="form-group">
-                                <label for="school">School</label>
-                                <select class="form-control @error('school') is-invalid @enderror" id="school" name="school">
+                                <label for="school_id">School</label>
+                                <select class="form-control @error('school_id') is-invalid @enderror" id="school_id" name="school_id">
                                     <option value="">Select School</option>
                                     @foreach ($schools as $school)
-                                        <option value="{{ $school->id }}" {{ old('school') == $school->id ? 'selected' : '' }}>{{ $school->name }}</option>
+                                        <option value="{{ $school->id }}" {{ old('school_id') == $school->id ? 'selected' : '' }}>{{ $school->name }}</option>
                                     @endforeach
                                 </select>
-                                @error ('school')
+                                @error ('school_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->string('name');
             $table->uuid('school_id')->nullable();
-            $table->foreign('school_id')->references('id')->on('schools')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('school_id')->references('id')->on('schools')->onDelete('set null');
             $table->uuid('major_id')->nullable();
-            $table->foreign('major_id')->references('id')->on('majorities')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('major_id')->references('id')->on('majors')->onDelete('set null');
             $table->uuid('created_by')->nullable();
             $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
             $table->uuid('updated_by')->nullable();
