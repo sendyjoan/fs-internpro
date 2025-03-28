@@ -27,7 +27,7 @@ class ClassRepository implements ClassRepositoryInterface
             if (Auth::user()->hasRole('Super Administrator')) {
                 $classes = $this->class->with('major', 'school')->get();
             } else {
-                $classes = $this->class->with('major')->where('school_id', Auth::user()->id)->get();
+                $classes = $this->class->with('major')->where('school_id', Auth::user()->school_id)->get();
             }
             Log::info('Fetched all classes successfully');
             return $classes;
@@ -43,7 +43,7 @@ class ClassRepository implements ClassRepositoryInterface
             if (Auth::user()->hasRole('Super Administrator')) {
                 $class = $this->class->with('major', 'school')->findOrFail($id);
             } else {
-                $class = $this->class->with('major')->where('school_id', Auth::user()->id)->findOrFail($id);
+                $class = $this->class->with('major')->where('school_id', Auth::user()->school_id)->findOrFail($id);
             }
             Log::info('Fetched class successfully');
             return $class;
@@ -59,7 +59,7 @@ class ClassRepository implements ClassRepositoryInterface
             if (Auth::user()->hasRole('Super Administrator')) {
                 $class = $this->class->with('major', 'schools')->where('code', $code)->firstOrFail();
             } else {
-                $class = $this->class->with('major')->where('school_id', Auth::user()->id)->where('code', $code)->firstOrFail();
+                $class = $this->class->with('major')->where('school_id', Auth::user()->school_id)->where('code', $code)->firstOrFail();
             }
             Log::info('Fetched class successfully');
             return $class;
