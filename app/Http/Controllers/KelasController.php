@@ -12,7 +12,7 @@ class KelasController extends Controller
      */
     public function index()
     {
-        dd('index');
+        return view('modules.class.index');
     }
 
     /**
@@ -20,7 +20,9 @@ class KelasController extends Controller
      */
     public function create()
     {
-        dd('create');
+        $majors = [];
+        $schools = [];
+        return view('modules.class.create', compact('majors', 'schools'));
     }
 
     /**
