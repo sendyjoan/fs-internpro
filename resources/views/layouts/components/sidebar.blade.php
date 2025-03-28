@@ -20,6 +20,9 @@
             @if (auth()->user()->can('class-list'))
               <li class="{{ request()->routeIs('classes.*') ? 'active' : '' }}"><a href="{{ route('classes.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Classes</span></a></li>
             @endif
+            @if (auth()->user()->can('partner-list'))
+              <li class="{{ request()->routeIs('classes.*') ? 'active' : '' }}"><a href="{{ route('partners.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Partners</span></a></li>
+            @endif
 
             @if (auth()->user()->can('permission-list') || auth()->user()->can('role-list') || auth()->user()->can('user-list') || auth()->user()->can('membership-list') || auth()->user()->can('school-list') || auth()->user()->can('dashboard-system'))
               <li class="menu-header">Settings</li>

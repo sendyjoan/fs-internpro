@@ -51,6 +51,12 @@ class UserAndPermissionSeeder extends Seeder
             'class-delete',
             'class-import',
             'class-export',
+            'partner-list',
+            'partner-create',
+            'partner-edit',
+            'partner-delete',
+            'partner-import',
+            'partner-export',
         ];
 
         foreach ($permissions as $permission) {
@@ -79,6 +85,11 @@ class UserAndPermissionSeeder extends Seeder
         }
 
         $permissions = Permission::where('name', 'like', 'class%')->get();
+        foreach ($permissions as $permission) {
+            $schoolAdministrator->givePermissionTo($permission);
+        }
+
+        $permissions = Permission::where('name', 'like', 'partner%')->get();
         foreach ($permissions as $permission) {
             $schoolAdministrator->givePermissionTo($permission);
         }
