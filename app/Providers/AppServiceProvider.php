@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Partner;
+use App\Observers\ModelObserver;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Eloquent\UserRepository;
@@ -38,5 +40,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
+        // Partner::observe(ModelObserver::class);
     }
 }

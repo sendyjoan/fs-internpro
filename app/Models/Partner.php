@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Models\BaseModel;
+use App\Observers\ModelObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-class Partner extends Model
+class Partner extends BaseModel
 {
     use SoftDeletes, HasUuids;
 
