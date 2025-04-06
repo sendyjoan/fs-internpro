@@ -49,7 +49,15 @@ class PartnerController extends Controller
      */
     public function store(Request $request)
     {
-        dd('store');
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:15',
+            'address' => 'required|string|max:255',
+            'contact' => 'required|string|max:255',
+            'website' => 'nullable|url|max:255',
+        ]);
+        dd($request->all());
     }
 
     /**

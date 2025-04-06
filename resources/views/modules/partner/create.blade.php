@@ -52,7 +52,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="address">Partner Address</label>
-                                <textarea class="form-control @error('address') is-invalid @enderror" id="address" name="address" rows="3" placeholder="Enter the full address of the partner, including street, city, and postal code">{{ old('address') }}</textarea>
+                                <input type="text" value="{{ old('address') }}" class="form-control @error('address') is-invalid @enderror" id="address" name="address" placeholder="Enter the full address of the partner, including street, city, and postal code">
                                 @error('address')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
