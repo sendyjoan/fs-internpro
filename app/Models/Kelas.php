@@ -35,9 +35,7 @@ class Kelas extends Model
         } else {
             $newNumber = 1;
         }
-        
-        $code = 'KLS-' . str_pad($newNumber, 6, '0', STR_PAD_LEFT);
-        return $code;
+        return 'KLS-' . str_pad($newNumber, 6, '0', STR_PAD_LEFT);
     }
 
     public function major()
