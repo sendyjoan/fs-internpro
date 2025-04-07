@@ -82,6 +82,7 @@
                         <div class="col-md-12 text-right">
                             <a href="{{ route('partners.index') }}" class="btn btn-secondary">Back</a>
                             <button type="submit" class="btn btn-primary">Create</button>
+                        </div>
                     </div>
                 </form>
             </div>
