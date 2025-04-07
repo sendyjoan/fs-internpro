@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\School;
 use App\Models\BaseModel;
 use App\Observers\ModelObserver;
 use Illuminate\Database\Eloquent\Model;
@@ -42,5 +43,10 @@ class Partner extends BaseModel
         
         $code = 'PART-' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
         return $code;
+    }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
     }
 }
