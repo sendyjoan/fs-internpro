@@ -31,21 +31,21 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label for="name">Partner Name</label>
-                                <input type="text" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" id="name" name="name">
+                                <input type="text" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Enter the partner's name">
                                 @error ('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label for="email">Partner Email</label>
-                                <input type="text" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" id="email" name="email">
+                                <input type="text" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Enter the partner's email">
                                 @error ('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label for="phone">Partner Phone</label>
-                                <input type="number" value="{{ old('phone') }}" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone">
+                                <input type="number" value="{{ old('phone') }}" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" placeholder="Enter the partner's phone number">
                                 @error ('phone')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -59,51 +59,25 @@
                             </div>
                             <div class="form-group">
                                 <label for="contact">Contact</label>
-                                <input type="text" value="{{ old('contact') }}" class="form-control @error('contact') is-invalid @enderror" id="contact" name="contact">
+                                <input type="text" value="{{ old('contact') }}" class="form-control @error('contact') is-invalid @enderror" id="contact" name="contact" placeholder="Enter the contact details">
                                 @error('contact')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="logo">Partner Logo</label>
-                                <input type="file" class="form-control-file @error('logo') is-invalid @enderror" id="logo" name="logo">
-                                @error('logo')
+                                <label for="file">Partner Logo</label>
+                                <input type="file" value="{{ old('file') }}" class="form-control @error('file') is-invalid @enderror" id="file" name="file">
+                                @error ('file')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label for="website">Website</label>
-                                <input type="url" value="{{ old('website') }}" class="form-control @error('website') is-invalid @enderror" id="website" name="website" placeholder="https://example.com">
+                                <input type="url" value="{{ old('website') }}" class="form-control @error('website') is-invalid @enderror" id="website" name="website" placeholder="Enter the partner's website URL (e.g., https://example.com)">
                                 @error('website')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            {{-- <div class="form-group">
-                                <label for="major_id">Partner Email</label>
-                                <select class="form-control @error('major_id') is-invalid @enderror" id="major_id" name="major_id">
-                                    <option value="">Select Major</option>
-                                    @foreach ($majors as $major)
-                                        <option value="{{ $major->id }}" {{ old('major_id') == $major->id ? 'selected' : '' }}>{{ $major->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error ('major_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            @if (Auth::user()->hasRole('Super Administrator'))
-                            <div class="form-group">
-                                <label for="school_id">School</label>
-                                <select class="form-control @error('school_id') is-invalid @enderror" id="school_id" name="school_id">
-                                    <option value="">Select School</option>
-                                    @foreach ($schools as $school)
-                                        <option value="{{ $school->id }}" {{ old('school_id') == $school->id ? 'selected' : '' }}>{{ $school->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error ('school_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            @endif --}}
                         </div>
                         <div class="col-md-12 text-right">
                             <a href="{{ route('partners.index') }}" class="btn btn-secondary">Back</a>
