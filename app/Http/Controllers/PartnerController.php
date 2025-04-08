@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Partner;
+use App\Services\PartnerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class PartnerController extends Controller
 {
+    protected $partnerService;
+
+    public function __construct(PartnerService $partnerService)
+    {
+        $this->partnerService = $partnerService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -17,7 +25,8 @@ class PartnerController extends Controller
     {
         try{
             Log::info('Start Process Index Partner Controller');
-
+            $partners = $this->partnerService->getAllPartner();
+            dd($partners);
             Log::info('End Process Index Partner Controller');
             return view('modules.partner.index');
         }catch(Exception $e){
