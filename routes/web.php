@@ -6,11 +6,17 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MajorController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\AccessControlController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdministratorController;
+use App\Http\Controllers\CoordinatorController;
+use App\Http\Controllers\MentorController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
 
 Route::get('/', function () {
     // return view('welcome');
@@ -58,6 +64,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('schools', SchoolController::class);
     Route::resource('majors', MajorController::class);
     Route::resource('classes', KelasController::class);
+    Route::resource('partners', PartnerController::class);
+    Route::resource('administrators', AdministratorController::class);
+    Route::resource('coordinators', CoordinatorController::class);
+    Route::resource('teachers', TeacherController::class);
+    Route::resource('students', StudentController::class);
+    Route::resource('mentors', MentorController::class);
     // Route::get('majors/export', [MajorController::class, 'export'])->name('export-major');
     Route::get('schools/{school}/adjustment', [SchoolController::class, 'adjustment'])->name('schools.adjustment');
     Route::post('schools/{school}/adjustment', [SchoolController::class, 'saveAdjustment'])->name('schools.save-adjustment');

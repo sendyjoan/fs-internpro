@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Routing\Controllers\Middleware;
 
 class KelasController extends Controller
 {
@@ -26,6 +27,29 @@ class KelasController extends Controller
         $this->majorService = $majorService;
         $this->classService = $classService;
     }
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(
+                middleware: 'permission:class-list',
+                only: ['index']
+            ),
+            new Middleware(
+                middleware: 'permission:class-create',
+                only: ['create', 'store']
+            ),
+            new Middleware(
+                middleware: 'permission:class-edit',
+                only: ['edit', 'update']
+            ),
+            new Middleware(
+                middleware: 'permission:class-delete',
+                only: ['destroy']
+            ),
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */

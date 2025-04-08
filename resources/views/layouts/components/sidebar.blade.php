@@ -20,6 +20,30 @@
             @if (auth()->user()->can('class-list'))
               <li class="{{ request()->routeIs('classes.*') ? 'active' : '' }}"><a href="{{ route('classes.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Classes</span></a></li>
             @endif
+            
+            @if (auth()->user()->can('partner-list'))
+              <li class="{{ request()->routeIs('partners.*') ? 'active' : '' }}"><a href="{{ route('partners.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Partners</span></a></li>
+            @endif
+
+            @if (auth()->user()->can('administrator-list'))
+              <li class="{{ request()->routeIs('administrators.*') ? 'active' : '' }}"><a href="{{ route('administrators.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Administrators</span></a></li>
+            @endif
+
+            @if (auth()->user()->can('coordinator-list'))
+              <li class="{{ request()->routeIs('coordinators.*') ? 'active' : '' }}"><a href="{{ route('coordinators.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Coordinators</span></a></li>
+            @endif
+
+            @if (auth()->user()->can('teacher-list'))
+              <li class="{{ request()->routeIs('teachers.*') ? 'active' : '' }}"><a href="{{ route('teachers.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Teachers</span></a></li>
+            @endif
+
+            @if (auth()->user()->can('student-list'))
+              <li class="{{ request()->routeIs('students.*') ? 'active' : '' }}"><a href="{{ route('students.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Students</span></a></li>
+            @endif
+
+            @if (auth()->user()->can('mentor-list'))
+              <li class="{{ request()->routeIs('mentors.*') ? 'active' : '' }}"><a href="{{ route('mentors.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Mentors</span></a></li>
+            @endif
 
             @if (auth()->user()->can('permission-list') || auth()->user()->can('role-list') || auth()->user()->can('user-list') || auth()->user()->can('membership-list') || auth()->user()->can('school-list') || auth()->user()->can('dashboard-system'))
               <li class="menu-header">Settings</li>
