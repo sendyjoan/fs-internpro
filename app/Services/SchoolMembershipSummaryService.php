@@ -222,4 +222,36 @@ class SchoolMembershipSummaryService
             throw $e;
         }
     }
+
+    public function increasePartner($id){
+        try {
+            Log::debug('Increasing partner for school membership summary', ['school_id' => $id]);
+            
+            $summary = $this->schoolMembershipSummaryRepositoryInterfaces->getSchoolMembershipSummaryBySchoolId($id);
+            Log::debug('School membership summary retrieved', ['summary_id' => $summary->id]);
+            
+            // Get membership by school ID
+            $membership = $this->membershipService->getMembershipById($summary->membership_id);
+            Log::debug('Membership retrieved', ['membership_id' => $membership->id]);
+            
+            // Check if partners_used is less than or equal to max_partners in membership
+            if ($summary->partners_used >= $membership->max_partners) {
+                Log::warning('Partners used exceeds or equals max partners', [
+                    'partners_used' => $summary->partners_used,
+                    'max_partners' => $membership->max_partners
+                ]);
+                return false;
+            }
+            
+            $summary->partners_used += 1;
+            $summary->save();
+            Log::debug('Partner increased successfully', ['summary_id' => $summary->id, 'partners_used' => $summary->partners_used]);
+            return $summary;
+        } catch (\Exception $e) {
+            // Log the error message
+            Log::error('Error increasing partners for school membership summary: ' . $e->getMessage(), ['school_id' => $id]);
+            // throw $e;
+            return false;
+        }
+    }
 }

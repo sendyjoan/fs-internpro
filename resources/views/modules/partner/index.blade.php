@@ -52,11 +52,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($partners as $partner)
+                        @foreach ($partners as $partner)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
+                                <td>{{ $partner->logo }}</td>
                                 <td>{{ $partner->code }}</td>
                                 <td>{{ $partner->name }}</td>
+                                <td>{{ $partner->email }}</td>
+                                <td>{{ $partner->phone }}</td>
+                                <td>{{ $partner->contact }}</td>
                                 @if (Auth::user()->hasRole('Super Administrator'))
                                     <td>{{ $partner->school->name }}</td>
                                 @endif
@@ -84,7 +88,7 @@
                                     </td>
                                 @endif
                             </tr>
-                        @endforeach --}}
+                        @endforeach
                     </tbody>
                 </table>
             </div>

@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Partner;
+use App\Services\PartnerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class PartnerController extends Controller
 {
+    protected $partnerService;
+
+    public function __construct(PartnerService $partnerService)
+    {
+        $this->partnerService = $partnerService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -17,9 +25,10 @@ class PartnerController extends Controller
     {
         try{
             Log::info('Start Process Index Partner Controller');
-
+            $partners = $this->partnerService->getAllPartner();
+            // dd($partners);
             Log::info('End Process Index Partner Controller');
-            return view('modules.partner.index');
+            return view('modules.partner.index', compact('partners'));
         }catch(Exception $e){
             Log::error('Error in Index Partner Controller: '.$e->getMessage());
             Alert::class('error', 'Error in Index Partner Controller: '.$e->getMessage());
@@ -57,7 +66,18 @@ class PartnerController extends Controller
             'contact' => 'required|string|max:255',
             'website' => 'nullable|url|max:255',
         ]);
-        dd($request->all());
+        try{
+            Log::debug('Start Process Store Partner Controller');
+            $data = $request->all();
+            $partner = $this->partnerService->createPartner($data);
+            Log::info('End Process Store Partner Controller');
+            Alert::toast('Partner created successfully', 'success');
+            return redirect()->route('partners.index');
+        }catch(Exception $e){
+            Log::error('Error in Store Partner Controller: '.$e->getMessage());
+            Alert::class('error', 'Error in Store Partner Controller: '.$e->getMessage());
+            return back();
+        }
     }
 
     /**
