@@ -3,16 +3,22 @@
 namespace App\Services;
 
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+// use App\Models\SchoolMembershipSummary;
+use App\Services\SchoolMembershipSummaryService;
 use App\Repositories\Contracts\ClassRepositoryInterface;
 use App\Repositories\Contracts\PartnerRepositoryInterface;
 
 class PartnerService
 {
     protected $partnerRepository;
+    protected $schoolMemberRepository;
 
-    public function __construct(PartnerRepositoryInterface $partnerRepository)
+    public function __construct(PartnerRepositoryInterface $partnerRepository, SchoolMembershipSummaryService $schoolMemberRepository)
     {
+        $this->schoolMemberRepository = $schoolMemberRepository;
         $this->partnerRepository = $partnerRepository;
     }
     
@@ -49,16 +55,30 @@ class PartnerService
     //     }
     // }
 
-    // public function createClass(array $data)
-    // {
-    //     try {
-    //         Log::info('Creating class', ['data' => $data]);
-    //         return $this->classRepository->create($data);
-    //     } catch (\Exception $e) {
-    //         Log::error('Error creating class: ' . $e->getMessage(), ['data' => $data]);
-    //         return null;
-    //     }
-    // }
+    public function createPartner(array $data)
+    {
+        // dd($data);
+        try {
+            DB::beginTransaction();
+            Log::debug('Creating partner', ['data' => $data]);
+            Log::debug('Checking if partner quotas are available', ['school_id' => Auth::user()->hasRole('Super Administrator') ? $data['school_id'] : Auth::user()->school_id]);
+            $summary = $this->schoolMemberRepository->increasePartner(Auth::user()->hasRole('Super Administrator') ? $data['school_id'] : Auth::user()->school_id);
+            if (!$summary) {
+                DB::rollBack();
+                Log::warning('Failed to increase partner quota', ['school_id' => Auth::user()->hasRole('Super Administrator') ? $data['school_id'] : Auth::user()->school_id]);
+                return false;
+            }
+            $partner = $this->partnerRepository->create($data);
+            Log::debug('Partner created successfully', ['partner' => $partner]);
+            DB::commit();
+            return $partner;
+            // return $this->classRepository->create($data);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error creating class: ' . $e->getMessage(), ['data' => $data]);
+            return false;
+        }
+    }
 
     // public function updateClass($id, array $data)
     // {

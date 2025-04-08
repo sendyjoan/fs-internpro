@@ -2,19 +2,22 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Models\Partner;
-use App\Repositories\Contracts\PartnerRepositoryInterface;
 use Exception;
+use App\Models\Partner;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\Contracts\PartnerRepositoryInterface;
+use App\Repositories\Eloquent\SchoolMembershipSummaryRepository;
 
 class PartnerRepository implements PartnerRepositoryInterface
 {
     protected $partner;
+    protected $schoolMembershipSummary;
 
-    public function __construct(Partner $partner)
+    public function __construct(Partner $partner, SchoolMembershipSummaryRepository $schoolMembershipSummary)
     {
+        $this->schoolMembershipSummary = $schoolMembershipSummary;
         $this->partner = $partner;
     }
 
@@ -32,19 +35,6 @@ class PartnerRepository implements PartnerRepositoryInterface
             Log::error('Error fetching partners: ' . $e->getMessage(), ['location' => "Name File : ".__FILE__."Line : ". __LINE__, 'details' => $e->getTrace()]);
             return false;
         }
-        // try{
-        //     Log::info('Fetching all classes from repository');
-        //     if (Auth::user()->hasRole('Super Administrator')) {
-        //         $classes = $this->class->with('major', 'school')->get();
-        //     } else {
-        //         $classes = $this->class->with('major')->where('school_id', Auth::user()->school_id)->get();
-        //     }
-        //     Log::info('Fetched all classes successfully');
-        //     return $classes;
-        // }catch (Exception $e) {
-        //     Log::error('Error fetching classes: ' . $e->getMessage());
-        //     return $e->getMessage();
-        // }
     }
 
     public function findById($id){
@@ -80,6 +70,20 @@ class PartnerRepository implements PartnerRepositoryInterface
     }
 
     public function create(array $data){
+        try{
+            Log::debug('Creating partner in repository with data', $data);
+            if (Auth::user()->hasRole('Super Administrator')) {
+                $data['school_id'] = $data['school_id'];
+            } else {
+                $data['school_id'] = Auth::user()->school_id;
+            }
+            $data['code'] = $this->partner->codeGenerator();
+            $partner = $this->partner->create($data);
+            return $partner;
+        }catch (Exception $e){
+            Log::error('Error creating partner: ' . $e->getMessage(), ['location' => "Name File : ".__FILE__."Line : ". __LINE__, 'details' => $e->getTrace()]);
+            return false;
+        }
         // dd($data);
         // try{
         //     DB::BeginTransaction();
