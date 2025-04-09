@@ -33,16 +33,16 @@ class PartnerService
         }
     }
 
-    // public function getClassById($id)
-    // {
-    //     try {
-    //         Log::info('Fetching class by ID from service', ['id' => $id]);
-    //         return $this->classRepository->findById($id);
-    //     } catch (\Exception $e) {
-    //         Log::error('Error fetching class by ID: ' . $e->getMessage(), ['id' => $id]);
-    //         return null;
-    //     }
-    // }
+    public function getPartnerById($id)
+    {
+        try {
+            Log::info('Fetching partner by ID from service', ['id' => $id]);
+            return $this->partnerRepository->findById($id);
+        } catch (\Exception $e) {
+            Log::error('Error fetching partner by ID: ' . $e->getMessage(), ['id' => $id]);
+            return false;
+        }
+    }
 
     // public function getClassByCode($code)
     // {
@@ -75,7 +75,7 @@ class PartnerService
             // return $this->classRepository->create($data);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error creating class: ' . $e->getMessage(), ['data' => $data]);
+            Log::error('Error creating partner: ' . $e->getMessage(), ['data' => $data]);
             return false;
         }
     }

@@ -38,19 +38,19 @@ class PartnerRepository implements PartnerRepositoryInterface
     }
 
     public function findById($id){
-        // try{
-        //     Log::info('Fetching class with ID '. $id, ['class_id' => $id]);
-        //     if (Auth::user()->hasRole('Super Administrator')) {
-        //         $class = $this->class->with('major', 'school')->findOrFail($id);
-        //     } else {
-        //         $class = $this->class->with('major')->where('school_id', Auth::user()->school_id)->findOrFail($id);
-        //     }
-        //     Log::info('Fetched class successfully', $class->toArray());
-        //     return $class;
-        // }catch(Exception $e){
-        //     Log::error('Error fetching detail class: ' . $e->getMessage());
-        //     return $e->getMessage();
-        // }
+        try{
+            Log::info('Fetching partner with ID '. $id, ['partner_id' => $id]);
+            if (Auth::user()->hasRole('Super Administrator')) {
+                $partner = $this->partner->with('school')->findOrFail($id);
+            } else {
+                $partner = $this->partner->where('school_id', Auth::user()->school_id)->findOrFail($id);
+            }
+            Log::info('Fetched partner successfully', $partner->toArray());
+            return $partner;
+        }catch(Exception $e){
+            Log::error('Error fetching detail partner: ' . $e->getMessage());
+            return $e->getMessage();
+        }
     }
 
     public function findByCode($code){
@@ -73,7 +73,7 @@ class PartnerRepository implements PartnerRepositoryInterface
         try{
             Log::debug('Creating partner in repository with data', $data);
             if (Auth::user()->hasRole('Super Administrator')) {
-                $data['school_id'] = $data['school_id'];
+                $data['school_id'] = $data['school'];
             } else {
                 $data['school_id'] = Auth::user()->school_id;
             }
