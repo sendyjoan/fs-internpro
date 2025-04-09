@@ -144,6 +144,21 @@ class PartnerController extends Controller
      */
     public function destroy(Partner $partner)
     {
-        dd('destroy');
+        try{
+            Log::debug('Start Process Destroy Partner Controller');
+            $partner = $this->partnerService->deletePartner($partner->id);
+            if (!$partner) {
+                Log::warning('Failed to delete partner', ['partner_id' => $partner->id]);
+                Alert::toast('Failed to delete partner', 'error');
+                return back();
+            }
+            Log::info('End Process Destroy Partner Controller');
+            Alert::toast('Partner deleted successfully', 'success');
+            return redirect()->route('partners.index');
+        }catch (Exception $e){
+            Log::error('Error in Destroy Partner Controller: '.$e->getMessage());
+            Alert::toast('Error in Destroy Partner Controller: '.$e->getMessage(), 'error');
+            return back();
+        }
     }
 }

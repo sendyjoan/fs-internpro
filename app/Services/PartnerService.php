@@ -98,16 +98,16 @@ class PartnerService
     //     }
     // }
 
-    // public function deleteClass($id)
-    // {
-    //     try {
-    //         Log::info('Deleting class', ['id' => $id]);
-    //         return $this->classRepository->delete($id);
-    //     } catch (\Exception $e) {
-    //         Log::error('Error deleting class: ' . $e->getMessage(), ['id' => $id]);
-    //         return null;
-    //     }
-    // }
+    public function deletePartner($id)
+    {
+        try {
+            Log::info('Deleting class', ['id' => $id]);
+            return $this->partnerRepository->delete($id);
+        } catch (\Exception $e) {
+            Log::error('Error deleting class: ' . $e->getMessage(), ['id' => $id]);
+            return null;
+        }
+    }
 
     // // function untuk transfer kelas
     // protected function cekTransferClass(string $school_id, $data)
