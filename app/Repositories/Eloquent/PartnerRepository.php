@@ -144,27 +144,19 @@ class PartnerRepository implements PartnerRepositoryInterface
     }
 
     public function delete($id){
-        // try{
-        //     DB::beginTransaction();
-        //     Log::info('Deleting class with ID ' . $id);
-        //     $class = self::findById($id);
-        //     // dd($class);
-        //     if (is_object($class)) {
-        //         $class->deleted_by = Auth::user()->id;
-        //         $class->save();
-        //         $class->delete();
-        //         $this->schoolMember->decreaseClass($class->school_id);
-        //         Log::info('Class deleted successfully', $class->toArray());
-        //         DB::commit();
-        //         return $class;
-        //     } else {
-        //         Log::error('Class not found or invalid: ' . $class);
-        //         return 'Class not found or invalid';
-        //     }
-        // }catch (Exception $e) {
-        //     DB::rollBack();
-        //     Log::error('Error deleting class: ' . $e->getMessage());
-        //     return $e->getMessage();
-        // }
+        try{
+            Log::info('Deleting partner with ID '. $id, ['partner_id' => $id]);
+            if (Auth::user()->hasRole('Super Administrator')) {
+                $partner = $this->partner->findOrFail($id);
+            } else {
+                $partner = $this->partner->where('school_id', Auth::user()->school_id)->findOrFail($id);
+            }
+            $partner->delete();
+            Log::info('Partner deleted successfully', ['partner_id' => $id]);
+            return true;
+        }catch(Exception $e){
+            Log::error('Error deleting partner: ' . $e->getMessage());
+            return false;
+        }
     }
 }

@@ -146,8 +146,9 @@ class PartnerController extends Controller
     {
         try{
             Log::debug('Start Process Destroy Partner Controller');
-            $partner = $this->partnerService->deletePartner($partner->id);
-            if (!$partner) {
+            $db_partner = $this->partnerService->deletePartner($partner->id);
+            if (!$db_partner) {
+                // dd($partner);
                 Log::warning('Failed to delete partner', ['partner_id' => $partner->id]);
                 Alert::toast('Failed to delete partner', 'error');
                 return back();

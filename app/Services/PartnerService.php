@@ -72,7 +72,6 @@ class PartnerService
             Log::debug('Partner created successfully', ['partner' => $partner]);
             DB::commit();
             return $partner;
-            // return $this->classRepository->create($data);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error creating partner: ' . $e->getMessage(), ['data' => $data]);
@@ -101,11 +100,45 @@ class PartnerService
     public function deletePartner($id)
     {
         try {
+            DB::beginTransaction();
             Log::info('Deleting class', ['id' => $id]);
-            return $this->partnerRepository->delete($id);
+            Log::debug('Checking if class can be deleted', ['id' => $id]);
+            if(Auth::user()->hasRole('Super Administrator')){
+                $partner = $this->partnerRepository->findById($id);
+                if (!$partner) {
+                    Log::warning('Partner not found', ['id' => $id]);
+                    DB::rollBack();
+                    return false;
+                }
+                $summary = $this->schoolMemberRepository->decreasePartner($partner->school_id);
+                if (!$summary) {
+                    Log::warning('Failed to decrease partner quota', ['id' => $id]);
+                    DB::rollBack();
+                    return false;
+                }
+                Log::debug('Partner quota decreased successfully', ['id' => $id]);
+            } else {
+                $summary = $this->schoolMemberRepository->decreasePartner(Auth::user()->school_id);
+                if (!$summary) {
+                    Log::warning('Failed to decrease partner quota', ['id' => Auth::user()->school_id]);
+                    DB::rollBack();
+                    return false;
+                }
+                Log::debug('Partner quota decreased successfully', ['id' => Auth::user()->school_id]);
+            }
+            $delete = $this->partnerRepository->delete($id);
+            if (!$delete) {
+                Log::warning('Failed to delete partner', ['id' => $id]);
+                DB::rollBack();
+                return false;
+            }
+            Log::debug('Partner deleted successfully', ['id' => $id]);
+            DB::commit();
+            return true;
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error('Error deleting class: ' . $e->getMessage(), ['id' => $id]);
-            return null;
+            return false;
         }
     }
 
