@@ -57,7 +57,6 @@ class PartnerService
 
     public function createPartner(array $data)
     {
-        // dd($data);
         try {
             DB::beginTransaction();
             Log::debug('Creating partner', ['data' => $data]);
