@@ -19,11 +19,14 @@ return new class extends Migration
             $table->foreign('membership_id')->references('id')->on('memberships')->onDelete('cascade')->onUpdate('cascade');
             $table->date('start_membership')->nullable();
             $table->date('end_membership')->nullable(false);
+            $table->integer('administrators_used')->nullable()->default(0)->comment('Number of students used');
+            $table->integer('coordinators_used')->nullable()->default(0)->comment('Number of students used');
+            $table->integer('teachers_used')->nullable()->default(0)->comment('Number of students used');
+            $table->integer('mentors_used')->nullable()->default(0)->comment('Number of mentors used');
+            $table->integer('students_used')->nullable()->default(0)->comment('Number of students used');
             $table->integer('majors_used')->nullable()->default(0)->comment('Number of majors used');
             $table->integer('classes_used')->nullable()->default(0)->comment('Number of classes used');
-            $table->integer('students_used')->nullable()->default(0)->comment('Number of students used');
             $table->integer('partners_used')->nullable()->default(0)->comment('Number of partners used');
-            $table->integer('mentors_used')->nullable()->default(0)->comment('Number of mentors used');
             $table->integer('programs_used')->nullable()->default(0)->comment('Number of programs used');
             $table->integer('activities_used')->nullable()->default(0)->comment('Number of activities used');
             $table->integer('storages_used')->nullable()->default(0)->comment('Number of storages used');

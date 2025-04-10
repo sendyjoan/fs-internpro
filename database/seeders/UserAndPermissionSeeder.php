@@ -124,8 +124,28 @@ class UserAndPermissionSeeder extends Seeder
             $schoolAdministrator->givePermissionTo($permission);
         }
 
-        $student = Role::create(['name' => 'student']);
-        $teacher = Role::create(['name' => 'teacher']);
-        $mentor = Role::create(['name' => 'mentor']);
+        $student = Role::create(['name' => 'Major Koordinator']);
+        $permissions = Permission::where('name', 'dashboard-access')->get();
+        foreach ($permissions as $permission) {
+            $student->givePermissionTo($permission);
+        }
+
+        $teacher = Role::create(['name' => 'Teacher']);
+        $permissions = Permission::where('name', 'dashboard-access')->get();
+        foreach ($permissions as $permission) {
+            $teacher->givePermissionTo($permission);
+        }
+
+        $mentor = Role::create(['name' => 'Student']);
+        $permissions = Permission::where('name', 'dashboard-access')->get();
+        foreach ($permissions as $permission) {
+            $mentor->givePermissionTo($permission);
+        }
+        
+        $mentor = Role::create(['name' => 'Mentor']);
+        $permissions = Permission::where('name', 'dashboard-access')->get();
+        foreach ($permissions as $permission) {
+            $mentor->givePermissionTo($permission);
+        }
     }
 }
