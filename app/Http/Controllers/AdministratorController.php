@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class AdministratorController extends Controller
 {
@@ -12,7 +15,23 @@ class AdministratorController extends Controller
      */
     public function index()
     {
-        dd(__FILE__ . ' ' . __LINE__);
+        // dd(__FILE__ . ' ' . __LINE__);
+        try {
+            $users = User::whereHas('roles', function ($query) {
+                $query->where('name', 'School Administrator');
+            })
+            ->when(Auth::user()->hasRole('Super Administrator'), function ($query) {
+                $query->with('school');
+            }, function ($query) {
+                $query->where('school_id', Auth::user()->school_id);
+            })
+            ->get();
+            // dd($users);
+            return view('modules.administrators.index', compact('users'));
+        } catch (Exception $e) {
+            Log::error('Error fetching users: ' . $e->getMessage(), ['detail', $e->getTraceAsString()]);
+            return redirect()->back()->with('error', 'Failed to fetch users.');
+        }
     }
 
     /**
