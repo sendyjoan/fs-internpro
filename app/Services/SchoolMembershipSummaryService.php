@@ -254,4 +254,34 @@ class SchoolMembershipSummaryService
             return false;
         }
     }
+
+    public function decreasePartner($id){
+        try {
+            Log::info('Decreasing partner for school membership summary', ['school_id' => $id]);
+            $summary = $this->schoolMembershipSummaryRepositoryInterfaces->getSchoolMembershipSummaryBySchoolId($id);
+            Log::info('School membership summary retrieved', ['summary_id' => $summary->id]);
+
+            Log::info('Get membership by ID', ['membership_id' => $summary->membership_id]);
+            $membership = $this->membershipService->getMembershipById($summary->membership_id);
+            Log::info('Membership retrieved', ['membership_id' => $membership->id]);
+
+            if ($summary->partners_used <= 0) {
+                Log::warning('Partners used is less than or equals 0', [
+                    'partners_used' => $summary->partners_used,
+                    'max_partners' => $membership->max_partners
+                ]);
+                return false;
+            }
+
+            $summary->partners_used -= 1;
+            $summary->save();
+            Log::info('Partner decreased successfully', ['summary_id' => $summary->id, 'partners_used' => $summary->partners_used]);
+            return $summary;
+        } catch (\Exception $e) {
+            // Log the error message
+            Log::error('Error decreasing partner for school membership summary: ' . $e->getMessage(), ['school_id' => $id]);
+            // throw $e;
+            return false;
+        }
+    }
 }
