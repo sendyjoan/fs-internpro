@@ -55,14 +55,12 @@ class UserController extends Controller
                 'school' => 'required|exists:schools,id',
             ]);
             Log::info('UserController@store: Validated data', $data);
-            DB::beginTransaction();
+            // dd($data);
             $user = $this->userService->create($data);
             Log::info('User created successfully', ['user_id' => $user->id]);
-            DB::commit();
             return redirect()->route('users.index')->with('success', 'User created successfully.');
         } catch (Exception $e) {
             // Log the error message
-            DB::rollBack();
             Log::error('Error in UserController@store: ' . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while creating the user.');
         }
