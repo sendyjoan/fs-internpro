@@ -33,16 +33,16 @@ class PartnerService
         }
     }
 
-    // public function getClassById($id)
-    // {
-    //     try {
-    //         Log::info('Fetching class by ID from service', ['id' => $id]);
-    //         return $this->classRepository->findById($id);
-    //     } catch (\Exception $e) {
-    //         Log::error('Error fetching class by ID: ' . $e->getMessage(), ['id' => $id]);
-    //         return null;
-    //     }
-    // }
+    public function getPartnerById($id)
+    {
+        try {
+            Log::info('Fetching partner by ID from service', ['id' => $id]);
+            return $this->partnerRepository->findById($id);
+        } catch (\Exception $e) {
+            Log::error('Error fetching partner by ID: ' . $e->getMessage(), ['id' => $id]);
+            return false;
+        }
+    }
 
     // public function getClassByCode($code)
     // {
@@ -57,7 +57,6 @@ class PartnerService
 
     public function createPartner(array $data)
     {
-        // dd($data);
         try {
             DB::beginTransaction();
             Log::debug('Creating partner', ['data' => $data]);
@@ -72,10 +71,9 @@ class PartnerService
             Log::debug('Partner created successfully', ['partner' => $partner]);
             DB::commit();
             return $partner;
-            // return $this->classRepository->create($data);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error creating class: ' . $e->getMessage(), ['data' => $data]);
+            Log::error('Error creating partner: ' . $e->getMessage(), ['data' => $data]);
             return false;
         }
     }
@@ -98,62 +96,48 @@ class PartnerService
     //     }
     // }
 
-    // public function deleteClass($id)
-    // {
-    //     try {
-    //         Log::info('Deleting class', ['id' => $id]);
-    //         return $this->classRepository->delete($id);
-    //     } catch (\Exception $e) {
-    //         Log::error('Error deleting class: ' . $e->getMessage(), ['id' => $id]);
-    //         return null;
-    //     }
-    // }
-
-    // // function untuk transfer kelas
-    // protected function cekTransferClass(string $school_id, $data)
-    // {
-    //     try {
-    //         Log::info('Pengecekan Transfer Kelas', ['id' => $school_id, 'data' => $data]);
-            
-    //         if ($data['school_id'] === $school_id) {
-    //             Log::info('Tidak perlu transfer kelas', ['id' => $school_id, 'data' => $data]);
-    //             return true;
-    //         }
-
-    //         if (!$this->transferKelas($school_id, $data)) {
-    //             Log::warning('Gagal transfer kelas', ['id' => $school_id, 'data' => $data]);
-    //             return false;
-    //         }
-
-    //         return true;
-    //     } catch (Exception $e) {
-    //         Log::error('Error cek transfer kelas: ' . $e->getMessage(), ['id' => $school_id, 'data' => $data]);
-    //         return false;
-    //     }
-    // }
-
-    // protected function transferKelas($id, $data)
-    // {
-    //     try {
-    //         Log::info('Transfer Kelas', ['id' => $id, 'data' => $data]);
-
-    //         if (!$this->schoolMember->decreaseClass($id)) {
-    //             Log::error('Error transfer kelas: Decrease class failed');
-    //             return false;
-    //         }
-
-    //         Log::info('Decrease class success');
-
-    //         if (!$this->schoolMember->increaseClass($data['school_id'])) {
-    //             Log::error('Error transfer kelas: Increase class failed');
-    //             return false;
-    //         }
-
-    //         Log::info('Increase class success');
-    //         return true;
-    //     } catch (Exception $e) {
-    //         Log::error('Error transfer kelas: ' . $e->getMessage(), ['id' => $id, 'data' => $data]);
-    //         return false;
-    //     }
-    // }
+    public function deletePartner($id)
+    {
+        try {
+            DB::beginTransaction();
+            Log::info('Deleting class', ['id' => $id]);
+            Log::debug('Checking if class can be deleted', ['id' => $id]);
+            if(Auth::user()->hasRole('Super Administrator')){
+                $partner = $this->partnerRepository->findById($id);
+                if (!$partner) {
+                    Log::warning('Partner not found', ['id' => $id]);
+                    DB::rollBack();
+                    return false;
+                }
+                $summary = $this->schoolMemberRepository->decreasePartner($partner->school_id);
+                if (!$summary) {
+                    Log::warning('Failed to decrease partner quota', ['id' => $id]);
+                    DB::rollBack();
+                    return false;
+                }
+                Log::debug('Partner quota decreased successfully', ['id' => $id]);
+            } else {
+                $summary = $this->schoolMemberRepository->decreasePartner(Auth::user()->school_id);
+                if (!$summary) {
+                    Log::warning('Failed to decrease partner quota', ['id' => Auth::user()->school_id]);
+                    DB::rollBack();
+                    return false;
+                }
+                Log::debug('Partner quota decreased successfully', ['id' => Auth::user()->school_id]);
+            }
+            $delete = $this->partnerRepository->delete($id);
+            if (!$delete) {
+                Log::warning('Failed to delete partner', ['id' => $id]);
+                DB::rollBack();
+                return false;
+            }
+            Log::debug('Partner deleted successfully', ['id' => $id]);
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error deleting class: ' . $e->getMessage(), ['id' => $id]);
+            return false;
+        }
+    }
 }

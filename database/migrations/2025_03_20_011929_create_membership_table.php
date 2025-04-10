@@ -16,11 +16,14 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->integer('price')->nullable(false);
             $table->integer('duration')->nullable(false)->comment('Duration in months');
+            $table->integer('max_administrators')->nullable(false)->default(0)->comment('Maximum number of students allowed');
+            $table->integer('max_coordinators')->nullable(false)->default(0)->comment('Maximum number of students allowed');
+            $table->integer('max_teachers')->nullable(false)->default(0)->comment('Maximum number of students allowed');
+            $table->integer('max_mentors')->nullable(false)->default(0)->comment('Maximum number of mentors allowed');
+            $table->integer('max_students')->nullable(false)->default(0)->comment('Maximum number of students allowed');
             $table->integer('max_majors')->nullable(false)->default(0)->comment('Maximum number of majors allowed');
             $table->integer('max_classes')->nullable(false)->default(0)->comment('Maximum number of classes allowed');
-            $table->integer('max_students')->nullable(false)->default(0)->comment('Maximum number of students allowed');
             $table->integer('max_partners')->nullable(false)->default(0)->comment('Maximum number of partners allowed');
-            $table->integer('max_mentors')->nullable(false)->default(0)->comment('Maximum number of mentors allowed');
             $table->integer('max_programs')->nullable(false)->default(0)->comment('Maximum number of programs allowed');
             $table->integer('max_activities')->nullable(false)->default(0)->comment('Maximum number of activities allowed');
             $table->integer('max_storages')->nullable(false)->default(0)->comment('Maximum number of storages allowed');
