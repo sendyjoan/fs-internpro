@@ -39,7 +39,13 @@ class AdministratorController extends Controller
      */
     public function create()
     {
-        dd(__FILE__ . ' ' . __LINE__);
+        // dd(__FILE__ . ' ' . __LINE__);
+        try {
+            return view('modules.administrators.create');
+        } catch (Exception $e) {
+            Log::error('Error showing create form: ' . $e->getMessage(), ['detail', $e->getTraceAsString()]);
+            return redirect()->back()->with('error', 'Failed to show create form.');
+        }
     }
 
     /**
