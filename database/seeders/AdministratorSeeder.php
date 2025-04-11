@@ -27,6 +27,10 @@ class AdministratorSeeder extends Seeder
             ]);
 
             $userAdministrator->assignRole('School Administrator');
+
+            $schoolMembership = $userAdministrator->school->membership;
+            $schoolMembership->administrators_used += 1;
+            $schoolMembership->save();
         }else if (env('APP_ENV') === 'testing'){
             $school = School::where('name', 'SMK Testing')->first();
             $userAdministrator = User::create([
@@ -39,6 +43,10 @@ class AdministratorSeeder extends Seeder
                 'password' => bcrypt('adminsmktest'),
             ]);
             $userAdministrator->assignRole('School Administrator');
+
+            $schoolMembership = $userAdministrator->school->membership;
+            $schoolMembership->administrators_used += 1;
+            $schoolMembership->save();
         }else{
             $school = School::where('name', 'SMKN 1 Trenggalek')->first();
             $userAdministrator = User::create([
@@ -51,6 +59,10 @@ class AdministratorSeeder extends Seeder
                 'password' => bcrypt('mariska'),
             ]);
             $userAdministrator->assignRole('School Administrator');
+
+            $schoolMembership = $userAdministrator->school->membership;
+            $schoolMembership->administrators_used += 1;
+            $schoolMembership->save();
         }
     }
 }
