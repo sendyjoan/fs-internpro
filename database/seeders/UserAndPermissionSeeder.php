@@ -123,6 +123,11 @@ class UserAndPermissionSeeder extends Seeder
         foreach ($permissions as $permission) {
             $schoolAdministrator->givePermissionTo($permission);
         }
+        
+        $permissions = Permission::where('name', 'like', 'administrator%')->get();
+        foreach ($permissions as $permission) {
+            $schoolAdministrator->givePermissionTo($permission);
+        }
 
         $student = Role::create(['name' => 'Major Koordinator']);
         $permissions = Permission::where('name', 'dashboard-access')->get();
