@@ -24,57 +24,36 @@
                     </div>
                 </div>
             </div>
-            {{-- <div class="card-body">
-                <form action="{{ route('partners.store') }}" method="POST" enctype="multipart/form-data">
+            <div class="card-body">
+                <form action="{{ route('administrators.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
-                                <label for="name">Partner Name</label>
-                                <input type="text" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Enter the partner's name">
+                                <label for="username">Username</label>
+                                <input type="text" value="{{ old('username') }}" class="form-control @error('username') is-invalid @enderror" id="username" name="username" placeholder="Enter the username">
+                                @error ('username')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Enter the full name">
                                 @error ('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="email">Partner Email</label>
-                                <input type="text" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Enter the partner's email">
+                                <label for="email">Email Address</label>
+                                <input type="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Enter the email address">
                                 @error ('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="phone">Partner Phone</label>
-                                <input type="number" value="{{ old('phone') }}" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" placeholder="Enter the partner's phone number">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" value="{{ old('phone') }}" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" placeholder="Enter the phone number">
                                 @error ('phone')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="address">Partner Address</label>
-                                <input type="text" value="{{ old('address') }}" class="form-control @error('address') is-invalid @enderror" id="address" name="address" placeholder="Enter the full address of the partner, including street, city, and postal code">
-                                @error('address')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="contact">Contact</label>
-                                <input type="text" value="{{ old('contact') }}" class="form-control @error('contact') is-invalid @enderror" id="contact" name="contact" placeholder="Enter the contact details">
-                                @error('contact')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="file">Partner Logo</label>
-                                <input type="file" value="{{ old('file') }}" class="form-control @error('file') is-invalid @enderror" id="file" name="file">
-                                @error ('file')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="website">Website</label>
-                                <input type="url" value="{{ old('website') }}" class="form-control @error('website') is-invalid @enderror" id="website" name="website" placeholder="Enter the partner's website URL (e.g., https://example.com)">
-                                @error('website')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -94,12 +73,12 @@
                             @endif
                         </div>
                         <div class="col-md-12 text-right">
-                            <a href="{{ route('partners.index') }}" class="btn btn-secondary">Back</a>
+                            <a href="{{ route('administrators.index') }}" class="btn btn-secondary">Back</a>
                             <button type="submit" class="btn btn-primary">Create</button>
                         </div>
                     </div>
                 </form>
-            </div> --}}
+            </div>
         </div>
     </div>
 </section>
