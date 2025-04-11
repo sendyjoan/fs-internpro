@@ -22,7 +22,6 @@ class AdministratorService
     {
         try {
             Log::info('Fetching all administrators from service');
-            dd(__FILE__ . ' ' . __LINE__);
             return $this->administratorRepository->getAll();
         } catch (Exception $e) {
             Log::error('Error fetching all administrators: ' . $e->getMessage());

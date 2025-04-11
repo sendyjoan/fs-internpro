@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use Exception;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Services\SchoolMembershipSummaryService;
 use App\Repositories\Contracts\SchoolAdministratorRepositoryInterface;
 
@@ -24,10 +25,16 @@ class AdministratorRepository implements SchoolAdministratorRepositoryInterface
         try {
             Log::debug('Fetching all administrators from repository');
             try {
-                $administrators = $this->administrator->with('roles')->whereHas('roles', function ($query) {
-                    $query->where('name', 'School Administrator');
-                })->get();
-                dd($administrators);
+                if (Auth::user()->hasRole('Super Administrator')) {
+                    $administrators = $this->administrator->with('roles')->whereHas('roles', function ($query) {
+                        $query->where('name', 'School Administrator');
+                    })->get();
+                } else {
+                    $administrators = $this->administrator->with('roles')->whereHas('roles', function ($query) {
+                        $query->where('name', 'School Administrator');
+                    })->where('school_id', Auth::user()->school_id)->get();
+                }
+                // dd($administrators);
                 Log::info('Fetched all administrators successfully', $administrators->toArray());
                 return ['error' => false, 'data' => $administrators];
             } catch (Exception $e) {

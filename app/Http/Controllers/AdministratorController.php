@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Services\AdministratorService;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AdministratorController extends Controller
 {
@@ -28,11 +29,16 @@ class AdministratorController extends Controller
         try {
             // dd(__FILE__ . ' ' . __LINE__);
             $users = $this->administratorService->getAll();
-            dd($users);
+            if ($users['error']) {
+                Alert::toast('Error fetching administrators: ' . $users['message'], 'error');
+                return redirect()->back();
+            }else{
+                $users = $users['data'];
+            }
             return view('modules.administrators.index', compact('users'));
         } catch (Exception $e) {
             Log::error('Error fetching users: ' . $e->getMessage(), ['detail', $e->getTraceAsString()]);
-            return redirect()->back()->with('error', 'Failed to fetch users.');
+            return redirect()->back()->with('error', 'Failed to fetch administrators.');
         }
     }
 
@@ -51,7 +57,8 @@ class AdministratorController extends Controller
             return view('modules.administrators.create', compact('schools'));
         } catch (Exception $e) {
             Log::error('Error showing create form: ' . $e->getMessage(), ['detail', $e->getTraceAsString()]);
-            return redirect()->back()->with('error', 'Failed to show create form.');
+            Alert::toast('Error showing create form: ' . $e->getMessage(), 'error');
+            return redirect()->back();
         }
     }
 
@@ -66,9 +73,17 @@ class AdministratorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(string $id)
     {
-        dd(__FILE__ . ' ' . __LINE__);
+        try{
+            $user = User::findOrFail($id);
+            // dd($user);
+            return view('modules.administrators.show', compact('user'));
+        } catch (Exception $e) {
+            Log::error('Error showing administrator: ' . $e->getMessage(), ['detail', $e->getTraceAsString()]);
+            Alert::toast('Error showing administrator: ' . $e->getMessage(), 'error');
+            return redirect()->back();
+        }
     }
 
     /**
