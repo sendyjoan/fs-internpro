@@ -2,18 +2,17 @@
 
 namespace App\Services;
 
-use App\Repositories\Contracts\AdministratorRepositoryInterface;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use App\Repositories\Eloquent\AdministratorRepository;
-use App\Repositories\Contracts\ClassRepositoryInterface;
+use App\Repositories\Contracts\AdminRepositoryInterface;
+use App\Repositories\Contracts\SchoolAdministratorRepositoryInterface;
 
 class AdministratorService
 {
     protected $administratorRepository;
     protected $schoolMembershipSummaryService;
 
-    public function __construct(AdministratorRepositoryInterface $administratorRepository, SchoolMembershipSummaryService $schoolMembershipSummaryService)
+    public function __construct(SchoolAdministratorRepositoryInterface $administratorRepository, SchoolMembershipSummaryService $schoolMembershipSummaryService)
     {
         $this->administratorRepository = $administratorRepository;
         $this->schoolMembershipSummaryService = $schoolMembershipSummaryService;
@@ -23,6 +22,7 @@ class AdministratorService
     {
         try {
             Log::info('Fetching all administrators from service');
+            dd(__FILE__ . ' ' . __LINE__);
             return $this->administratorRepository->getAll();
         } catch (Exception $e) {
             Log::error('Error fetching all administrators: ' . $e->getMessage());

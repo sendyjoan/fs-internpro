@@ -16,6 +16,7 @@ class AdministratorController extends Controller
 
     public function __construct(AdministratorService $administratorService)
     {
+        // dd(__FILE__ . ' ' . __LINE__);
         $this->administratorService = $administratorService;
     }
     /**
