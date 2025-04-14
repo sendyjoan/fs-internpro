@@ -20,18 +20,18 @@ class AdministratorRepository implements SchoolAdministratorRepositoryInterface
         $this->schoolMember = $schoolMember;
     }
 
-    public function getAll()
+    public function getAll($key)
     {
         try {
             Log::debug('Fetching all administrators from repository');
             try {
                 if (Auth::user()->hasRole('Super Administrator')) {
-                    $administrators = $this->administrator->with('roles')->whereHas('roles', function ($query) {
-                        $query->where('name', 'School Administrator');
+                    $administrators = $this->administrator->with('roles')->whereHas('roles', function ($query) use ($key) {
+                        $query->where('name', $key);
                     })->get();
                 } else {
-                    $administrators = $this->administrator->with('roles')->whereHas('roles', function ($query) {
-                        $query->where('name', 'School Administrator');
+                    $administrators = $this->administrator->with('roles')->whereHas('roles', function ($query) use ($key) {
+                        $query->where('name', $key);
                     })->where('school_id', Auth::user()->school_id)->get();
                 }
                 // dd($administrators);
