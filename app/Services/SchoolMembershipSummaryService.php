@@ -284,4 +284,35 @@ class SchoolMembershipSummaryService
             return false;
         }
     }
+
+    public function increaseAdministrator($id){
+        try {
+            Log::info('Increasing administrator for school membership summary', ['school_id' => $id]);
+            
+            $summary = $this->schoolMembershipSummaryRepositoryInterfaces->getSchoolMembershipSummaryBySchoolId($id);
+            Log::info('School membership summary retrieved', ['summary_id' => $summary->id]);
+            
+            // Get membership by school ID
+            $membership = $this->membershipService->getMembershipById($summary->membership_id);
+            Log::info('Membership retrieved', ['membership_id' => $membership->id]);
+            
+            // Check if administrators_used is less than or equal to max_administrators in membership
+            if ($summary->administrators_used >= $membership->max_administrators) {
+                Log::warning('Administrators used exceeds or equals max administrators', [
+                    'administrators_used' => $summary->administrators_used,
+                    'max_administrators' => $membership->max_administrators
+                ]);
+                return false;
+            }
+            
+            $summary->administrators_used += 1;
+            $summary->save();
+            Log::info('Administrator increased successfully', ['summary_id' => $summary->id, 'administrators_used' => $summary->administrators_used]);
+            return $summary;
+        } catch (\Exception $e) {
+            // Log the error message
+            Log::error('Error increasing administrator for school membership summary: ' . $e->getMessage(), ['school_id' => $id]);
+            throw $e;
+        }
+    }
 }
