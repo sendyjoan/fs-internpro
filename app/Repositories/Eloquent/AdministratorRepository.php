@@ -65,6 +65,7 @@ class AdministratorRepository implements SchoolAdministratorRepositoryInterface
     {
         try {
             Log::info('Creating administrator with data in repository', $data);
+            $schoolMembership = false;
             $data['password'] = bcrypt($data['username']);
             if(Auth::user()->hasRole('Super Administrator')){
                 $data['school_id'] = $data['school'];
@@ -73,7 +74,9 @@ class AdministratorRepository implements SchoolAdministratorRepositoryInterface
                 $data['school_id'] = Auth::user()->school_id;
             }
             Log::debug('Checking if user quotas are available', ['school_id' => $data['school_id']]);
-            $schoolMembership = $this->schoolMember->increaseAdministrator($data['school_id']);
+            if ($key == 'School Administrator'){
+                $schoolMembership = $this->schoolMember->increaseAdministrator($data['school_id']);
+            }
             if (!$schoolMembership) {
                 Log::error('User quotas exceeded for school ID: ' . $data['school_id']);
                 return ['error' => true, 'message' => 'User quotas exceeded for this school.'];
