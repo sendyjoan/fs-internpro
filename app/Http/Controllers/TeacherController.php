@@ -2,17 +2,40 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Services\AdministratorService;
 
 class TeacherController extends Controller
 {
+    protected $administratorService;
+
+    public function __construct(AdministratorService $administratorService)
+    {
+        $this->administratorService = $administratorService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        dd(__FILE__ . ' ' . __LINE__);
+        try {
+            Log::debug('Fetching all Teacher');
+            $users = $this->administratorService->getAll('Teacher');
+            if ($users['error']) {
+                Log::error('Error fetching teachers: ' . $users['message']);
+                return redirect()->back()->with('error', 'Failed to fetch teachers.');
+            } else {
+                $users = $users['data'];
+            }
+            // dd($users);
+            return view('modules.teachers.index', compact('users'));
+        } catch (Exception $e) {
+            Log::error('Error fetching teachers: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to fetch teachers.');
+        }
     }
 
     /**
