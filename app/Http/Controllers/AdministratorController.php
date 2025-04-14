@@ -64,13 +64,29 @@ class AdministratorController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username',
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'phone' => 'required',
-            'school' => 'nullable|exists:schools,id',
+            'phone' => 'required|unique:users,phone',
+            'school' => Auth::user()->hasRole('Super Administrator') ? 'required|exists:schools,id' : 'nullable|exists:schools,id',
         ]);
-        dd(__FILE__ . ' ' . __LINE__);
+        Log::debug('Validation passed, creating administrator', $request->all());
+        try {
+            Log::debug('Starting to create administrator');
+            $request = $request->all();
+            $admin = $this->administratorService->create($request, 'School Administrator');
+            if ($admin['error']) {
+                Alert::toast('Error creating administrator: ' . $admin['message'], 'error');
+                return redirect()->back();
+            }else{
+                Alert::toast('Administrator created successfully', 'success');
+                return redirect()->route('administrators.index');
+            }
+        } catch (Exception $e) {
+            Log::error('Error creating administrator: ' . $e->getMessage(), ['detail', $e->getTraceAsString()]);
+            Alert::toast('Error creating administrator: ' . $e->getMessage(), 'error');
+            return redirect()->back();
+        }
     }
 
     /**

@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use RealRashid\SweetAlert\Facades\Alert;
 use App\Repositories\Contracts\AdminRepositoryInterface;
 use App\Repositories\Contracts\SchoolAdministratorRepositoryInterface;
 
@@ -43,6 +45,26 @@ class AdministratorService
             return $admin;
         } catch (Exception $e) {
             Log::error('Error fetching administrator: ' . $e->getMessage());
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function create($data, $key){
+        try{
+            DB::beginTransaction();
+            Log::debug('Starting creating new administrator in service', $data);
+            $admin = $this->administratorRepository->create($data, $key);
+            if ($admin['error']) {
+                Log::error('Error creating new administrator: ' . $admin['message']);
+                return ['error' => true, 'message' => $admin['message']];
+            }
+            Log::info('New administrator created successfully', $admin['data']->toArray());
+            Alert::toast('New administrator created successfully', 'success');
+            DB::commit();
+            return ['error' => false, 'data' => $admin['data']];
+        }catch (Exception $e){
+            DB::rollBack();
+            Log::error('Error creating new administrator: ' . $e->getMessage(), ['detail' => $e->getTraceAsString()]);
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
