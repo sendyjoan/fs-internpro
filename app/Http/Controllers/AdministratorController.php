@@ -17,7 +17,6 @@ class AdministratorController extends Controller
 
     public function __construct(AdministratorService $administratorService)
     {
-        // dd(__FILE__ . ' ' . __LINE__);
         $this->administratorService = $administratorService;
     }
     /**
@@ -25,10 +24,8 @@ class AdministratorController extends Controller
      */
     public function index()
     {
-        // dd(__FILE__ . ' ' . __LINE__);
         try {
-            // dd(__FILE__ . ' ' . __LINE__);
-            $users = $this->administratorService->getAll();
+            $users = $this->administratorService->getAll('School Administrator');
             if ($users['error']) {
                 Alert::toast('Error fetching administrators: ' . $users['message'], 'error');
                 return redirect()->back();
@@ -47,7 +44,6 @@ class AdministratorController extends Controller
      */
     public function create()
     {
-        // dd(__FILE__ . ' ' . __LINE__);
         try {
             if (Auth::user()->hasRole('Super Administrator')) {
                 $schools = School::all();
@@ -67,6 +63,13 @@ class AdministratorController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'username' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required',
+            'school' => 'nullable|exists:schools,id',
+        ]);
         dd(__FILE__ . ' ' . __LINE__);
     }
 
@@ -76,8 +79,13 @@ class AdministratorController extends Controller
     public function show(string $id)
     {
         try{
-            $user = User::findOrFail($id);
-            // dd($user);
+            $admin = $this->administratorService->findById($id);
+            if ($admin['error']) {
+                Alert::toast('Error fetching administrator: ' . $admin['message'], 'error');
+                return redirect()->back();
+            }else{
+                $user = $admin['data'];
+            }
             return view('modules.administrators.show', compact('user'));
         } catch (Exception $e) {
             Log::error('Error showing administrator: ' . $e->getMessage(), ['detail', $e->getTraceAsString()]);

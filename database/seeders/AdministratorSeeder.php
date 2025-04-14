@@ -31,6 +31,21 @@ class AdministratorSeeder extends Seeder
             $schoolMembership = $userAdministrator->school->membership;
             $schoolMembership->administrators_used += 1;
             $schoolMembership->save();
+
+            $userMajorCoordinator = User::create([
+                'name' => 'Koordinator Jurusan SMK Development',
+                'email' => 'major@smkdev.ac.id',
+                'phone' => '087890654377',
+                'school_id' => $school->id,
+                'username' => 'majorcoordinator',
+                'email_verified_at' => now(),
+                'password' => bcrypt('majorcoordinator'),
+            ]);
+
+            $userMajorCoordinator->assignRole('Major Coordinator');
+            $schoolMembership = $userMajorCoordinator->school->membership;
+            $schoolMembership->coordinators_used += 1;
+            $schoolMembership->save();
         }else if (env('APP_ENV') === 'testing'){
             $school = School::where('name', 'SMK Testing')->first();
             $userAdministrator = User::create([
