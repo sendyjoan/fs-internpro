@@ -6,7 +6,7 @@ interface SchoolAdministratorRepositoryInterface
 {
     public function getAll($key);
     public function findById($id);
-    public function create(array $data);
+    public function create(array $data, $key);
     public function update($id, array $data);
     public function delete($id);
 }
