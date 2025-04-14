@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 use App\Services\SchoolMembershipSummaryService;
 use App\Repositories\Contracts\SchoolAdministratorRepositoryInterface;
 
@@ -60,23 +61,34 @@ class AdministratorRepository implements SchoolAdministratorRepositoryInterface
         }
     }
 
-    public function create(array $data)
+    public function create(array $data, $key)
     {
         try {
-            Log::info('Creating administrator with data', $data);
+            Log::info('Creating administrator with data in repository', $data);
+            $schoolMembership = false;
             $data['password'] = bcrypt($data['username']);
-            $data['school_id'] = $data['school'];
-            unset($data['school']);
+            if(Auth::user()->hasRole('Super Administrator')){
+                $data['school_id'] = $data['school'];
+                unset($data['school']);
+            }else{
+                $data['school_id'] = Auth::user()->school_id;
+            }
             Log::debug('Checking if user quotas are available', ['school_id' => $data['school_id']]);
-            $schoolMembership = $this->schoolMember->increaseAdministrator($data['school_id']);
+            if ($key == 'School Administrator'){
+                $schoolMembership = $this->schoolMember->increaseAdministrator($data['school_id']);
+            }
             if (!$schoolMembership) {
                 Log::error('User quotas exceeded for school ID: ' . $data['school_id']);
-                throw new \Exception('User quotas exceeded for this school.');
+                return ['error' => true, 'message' => 'User quotas exceeded for this school.'];
             }
             $administrator = $this->administrator->create($data);
+            if (!$administrator) {
+                Log::error('Error creating administrator: ' . $administrator['message']);
+                return ['error' => true, 'message' => 'Error creating administrator.'];
+            }
             Log::info('Administrator created successfully', $administrator->toArray());
             Log::info('Assign role to administrator: ', $administrator->toArray());
-            $administrator->assignRole('School Administrator');
+            $administrator->assignRole($key);
             Log::info('Role assigned successfully ', $administrator->toArray());
             return ['error' => false, 'data' => $administrator];
         } catch (Exception $e) {
