@@ -58,6 +58,20 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="form-group">
+                                <label for="contact">Contact</label>
+                                <input type="text" value="{{ !empty(old('contact')) ? old('contact') : $partner->contact }}" class="form-control @error('contact') is-invalid @enderror" id="contact" name="contact">
+                                @error ('contact')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="website">Website</label>
+                                <input type="text" value="{{ !empty(old('website')) ? old('website') : $partner->website }}" class="form-control @error('website') is-invalid @enderror" id="website" name="website">
+                                @error ('website')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                         <div class="col-md-12 text-right">
                             <a href="{{ route('partners.index') }}" class="btn btn-secondary">Back</a>
