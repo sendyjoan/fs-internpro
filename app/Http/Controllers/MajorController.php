@@ -182,7 +182,16 @@ class MajorController extends Controller implements HasMiddleware
             $this->majorService->deleteMajor($major->id);
             Log::info('Major deleted successfully');
             Log::info('Decrease Major Capacity');
-            $decrease = $this->schoolMember->decreaseMajor(Auth::user()->school_id);
+            if (Auth::user()->hasRole('Super Administrator')){
+                $decrease = $this->schoolMember->decreaseMajor($major->school_id);
+            }else{
+                $decrease = $this->schoolMember->decreaseMajor(Auth::user()->school_id);
+            }
+            if(!$decrease || $decrease == null){
+                Log::error('Error decreasing major capacity');
+                Alert::toast('Error decreasing major capacity', 'error');
+                return redirect()->back()->with('error', 'Error decreasing major capacity');
+            }
             Log::info('Major Capacity decreased successfully', $decrease->toArray());
             return redirect()->route('majors.index')->with('success', 'Major deleted successfully');
         }catch (Exception $e){

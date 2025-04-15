@@ -121,9 +121,9 @@ class PartnerController extends Controller
     {
         try{
             Log::info('Start Process Edit Partner Controller');
-
+            $partner = $this->partnerService->getPartnerById($partner->id);
             Log::info('End Process Edit Partner Controller');
-            return view('modules.partner.edit');
+            return view('modules.partner.edit', compact('partner'));
         }catch(Exception $e){
             Log::error('Error in Edit Partner Controller: '.$e->getMessage());
             Alert::class('error', 'Error in Edit Partner Controller: '.$e->getMessage());
@@ -136,7 +136,7 @@ class PartnerController extends Controller
      */
     public function update(Request $request, Partner $partner)
     {
-        dd('update');
+        dd($request->all());
     }
 
     /**

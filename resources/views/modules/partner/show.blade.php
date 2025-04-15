@@ -45,7 +45,7 @@
                     </tr>
                     <tr>
                         <th width="30%">Address Partner</th>
-                        <td>{{ $partner->address }}</td>
+                        <td>{!! $partner->address !!}</td>
                     </tr>
                     <tr>
                         <th width="30%">Contact Partner</th>
