@@ -52,7 +52,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="address">Partner Address</label>
-                                <input type="text" value="{{ old('address') }}" class="form-control @error('address') is-invalid @enderror" id="address" name="address" placeholder="Enter the full address of the partner, including street, city, and postal code">
+                                <textarea class="form-control summernote @error('address') is-invalid @enderror" id="address" name="address">{{ old('address') }}</textarea>
                                 @error('address')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -104,3 +104,13 @@
     </div>
 </section>
 @endsection
+
+@push('scripts')
+<script>
+  $(document).ready(function() {
+    $('.summernote').summernote({
+      height: 250
+    });
+  });
+</script>
+@endpush
