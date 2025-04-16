@@ -54,19 +54,7 @@ class PartnerRepository implements PartnerRepositoryInterface
     }
 
     public function findByCode($code){
-        // try{
-        //     Log::info('Fetching class with code ' . $code);
-        //     if (Auth::user()->hasRole('Super Administrator')) {
-        //         $class = $this->class->with('major', 'schools')->where('code', $code)->firstOrFail();
-        //     } else {
-        //         $class = $this->class->with('major')->where('school_id', Auth::user()->school_id)->where('code', $code)->firstOrFail();
-        //     }
-        //     Log::info('Fetched class successfully');
-        //     return $class;
-        // }catch(Exception $e){
-        //     Log::error('Error fetching class: ' . $e->getMessage());
-        //     return $e->getMessage();
-        // }
+        // 
     }
 
     public function create(array $data){
@@ -84,63 +72,30 @@ class PartnerRepository implements PartnerRepositoryInterface
             Log::error('Error creating partner: ' . $e->getMessage(), ['location' => "Name File : ".__FILE__."Line : ". __LINE__, 'details' => $e->getTrace()]);
             return false;
         }
-        // dd($data);
-        // try{
-        //     DB::BeginTransaction();
-        //     Log::info('Creating class in repository with data', $data);
-        //     $data['code'] = $this->class->codeGenerator();
-        //     if (Auth::user()->hasRole('Super Administrator')) {
-        //         $class = $this->class->create($data);
-        //         try{
-        //             $this->schoolMember->increaseClass($class->school_id);
-        //         }catch(Exception $e){
-        //             DB::rollBack();
-        //             Log::error('Error creating class: ' . $e->getMessage());
-        //             return $e->getMessage();
-        //         }
-        //     } else {
-        //         $class = $this->class->create(array_merge($data, ['school_id' => Auth::user()->school_id]));
-        //         try{
-        //             $this->schoolMember->increaseClass($class->school_id);
-        //         }catch(Exception $e){
-        //             DB::rollBack();
-        //             Log::error('Error creating class: ' . $e->getMessage());
-        //             return $e->getMessage();
-        //         }
-        //     }
-        //     Log::info('Class created successfully', $class->toArray());
-        //     DB::commit();
-        //     return $class;
-        // }catch (Exception $e) {
-        //     DB::rollBack();
-        //     Log::error('Error creating class: ' . $e->getMessage());
-        //     return $e->getMessage();
-        // }
     }
 
     public function update($id, array $data){
-        // try{
-        //     Log::info('Updating class in repository with data', $data);
-        //     $class = self::findById($id);
-        //     if (is_object($class)) {
-        //         $data['updated_by'] = Auth::user()->id;
-        //         if (Auth::user()->hasRole('Super Administrator')) {
-        //             $class->update($data);
-        //         } else {
-        //             $class->update(array_merge($data, ['school_id' => Auth::user()->school_id]));
-        //         }
-        //         Log::info('Class updated successfully', $class->toArray());
-        //         return $class;
-        //     } else {
-        //         Log::error('Class not found or invalid: ' . $class);
-        //         return 'Class not found or invalid';
-        //     }
-        //     Log::info('Class updated successfully', $class->toArray());
-        //     return $class;
-        // }catch (Exception $e) {
-        //     Log::error('Error updating class: ' . $e->getMessage());
-        //     return $e->getMessage();
-        // }
+        try{
+            Log::info('Updating class in repository with data', $data);
+            $partner = self::findById($id);
+            if (is_object($partner)) {
+                $data['updated_by'] = Auth::user()->id;
+                if (Auth::user()->hasRole('Super Administrator')) {
+                    $partner->update($data);
+                } else {
+                    $partner->update(array_merge($data, ['school_id' => Auth::user()->school_id]));
+                }
+                Log::info('Class updated successfully', $partner->toArray());
+            } else {
+                Log::error('Class not found or invalid: ' . $partner);
+                return ['success' => false, 'message' => 'Class not found or invalid'];
+            }
+            Log::info('Class updated successfully', $partner->toArray());
+            return ['success' => true, 'message' => 'Class updated successfully'];
+        }catch (Exception $e) {
+            Log::error('Error updating class: ' . $e->getMessage(), ['location' => "Name File : ".__FILE__."Line : ". __LINE__, 'details' => $e->getTrace()]);
+            return ['success' => false, 'message' => 'Error updating class: ' . $e->getMessage()];
+        }
     }
 
     public function delete($id){
