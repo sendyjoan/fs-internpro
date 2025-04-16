@@ -54,9 +54,9 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $class->code }}</td>
                                 <td>{{ $class->name }}</td>
-                                <td>{{ $class->major->name }}</td>
+                                <td>{{ $class->major->name ?? 'Major Deleted' }}</td>
                                 @if (Auth::user()->hasRole('Super Administrator'))
-                                    <td>{{ $class->school->name }}</td>
+                                    <td>{{ $class->school->name ?? 'School Deleted' }}</td>
                                 @endif
                                 @if (auth()->user()->can('class-edit') || auth()->user()->can('class-delete'))
                                     <td>

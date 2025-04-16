@@ -14,35 +14,38 @@
 
             @if (auth()->user()->can('major-list'))
               <li class="menu-header">Master Data</li>
-              <li class="{{ request()->routeIs('majors.*') ? 'active' : '' }}"><a href="{{ route('majors.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Majors</span></a></li>
+              <li class="{{ request()->routeIs('majors.*') ? 'active' : '' }}"><a href="{{ route('majors.index') }}" class="nav-link"><i class="fas fa-sitemap"></i><span>Majors</span></a></li>
             @endif
             
             @if (auth()->user()->can('class-list'))
-              <li class="{{ request()->routeIs('classes.*') ? 'active' : '' }}"><a href="{{ route('classes.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Classes</span></a></li>
+              <li class="{{ request()->routeIs('classes.*') ? 'active' : '' }}"><a href="{{ route('classes.index') }}" class="nav-link"><i class="fas fa-door-open"></i><span>Classes</span></a></li>
             @endif
             
             @if (auth()->user()->can('partner-list'))
-              <li class="{{ request()->routeIs('partners.*') ? 'active' : '' }}"><a href="{{ route('partners.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Partners</span></a></li>
+              <li class="{{ request()->routeIs('partners.*') ? 'active' : '' }}"><a href="{{ route('partners.index') }}" class="nav-link"><i class="fas fa-building"></i><span>Partners</span></a></li>
             @endif
 
-            @if (auth()->user()->can('administrator-list'))
-              <li class="{{ request()->routeIs('administrators.*') ? 'active' : '' }}"><a href="{{ route('administrators.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Administrators</span></a></li>
-            @endif
-
-            @if (auth()->user()->can('coordinator-list'))
-              <li class="{{ request()->routeIs('coordinators.*') ? 'active' : '' }}"><a href="{{ route('coordinators.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Coordinators</span></a></li>
-            @endif
-
-            @if (auth()->user()->can('teacher-list'))
-              <li class="{{ request()->routeIs('teachers.*') ? 'active' : '' }}"><a href="{{ route('teachers.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Teachers</span></a></li>
-            @endif
-
-            @if (auth()->user()->can('student-list'))
-              <li class="{{ request()->routeIs('students.*') ? 'active' : '' }}"><a href="{{ route('students.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Students</span></a></li>
-            @endif
-
-            @if (auth()->user()->can('mentor-list'))
-              <li class="{{ request()->routeIs('mentors.*') ? 'active' : '' }}"><a href="{{ route('mentors.index') }}" class="nav-link"><i class="fas fa-save"></i><span>Mentors</span></a></li>
+            @if (auth()->user()->can('administrator-list') || auth()->user()->can('coordinator-list') || auth()->user()->can('teacher-list') || auth()->user()->can('student-list') || auth()->user()->can('mentor-list'))
+              <li class="nav-item dropdown {{ request()->routeIs('administrators.*') || request()->routeIs('coordinators.*') || request()->routeIs('teachers.*') || request()->routeIs('students.*') || request()->routeIs('mentors.*') ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-save"></i> <span>User Management</span></a>
+                <ul class="dropdown-menu">
+                  @if (auth()->user()->can('administrator-list'))
+                    <li class="{{ request()->routeIs('administrators.*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('administrators.index') }}">Administrators</a></li>
+                  @endif
+                  @if (auth()->user()->can('coordinator-list'))
+                    <li class="{{ request()->routeIs('coordinators.*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('coordinators.index') }}">Coordinators</a></li>
+                  @endif
+                @if (auth()->user()->can('teacher-list'))
+                  <li class="{{ request()->routeIs('teachers.*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('teachers.index') }}">Teachers</a></li>
+                @endif
+                @if (auth()->user()->can('student-list'))
+                  <li class="{{ request()->routeIs('students.*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('students.index') }}">Students</a></li>
+                @endif
+                @if (auth()->user()->can('mentor-list'))
+                  <li class="{{ request()->routeIs('mentors.*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('mentors.index') }}">Mentors</a></li>
+                @endif
+                </ul>
+              </li>
             @endif
 
             @if (auth()->user()->can('permission-list') || auth()->user()->can('role-list') || auth()->user()->can('user-list') || auth()->user()->can('membership-list') || auth()->user()->can('school-list') || auth()->user()->can('dashboard-system'))
