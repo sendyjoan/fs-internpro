@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SchoolGreetings;
 use App\Models\School;
 use App\Models\Membership;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use App\Services\SchoolService;
 use Illuminate\Support\Facades\DB;
 use App\Services\MembershipService;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use App\Models\SchoolMembershipSummary;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Routing\Controllers\Middleware;
@@ -247,5 +249,17 @@ class SchoolController extends Controller implements HasMiddleware
             Log::error('Error in SchoolController@saveAdjustment: ' . $e->getMessage());
             return redirect()->back();
         }
+    }
+
+    public function sentEmailGreetings(){
+        
+        $data = [
+            'name' => 'SMK Negeri 1 Testing',
+            'message' => 'This is a test email from Laravel 12.'
+        ];
+
+        Mail::to("sendyjoan5@gmail.com")->send(new SchoolGreetings($data));
+ 
+	    return redirect()->route('schools.index')->with('success', 'Email sent successfully!');
     }
 }
