@@ -44,17 +44,6 @@ class PartnerService
         }
     }
 
-    // public function getClassByCode($code)
-    // {
-    //     try {
-    //         Log::info('Fetching class by code from service', ['code' => $code]);
-    //         return $this->classRepository->findByCode($code);
-    //     } catch (\Exception $e) {
-    //         Log::error('Error fetching class by code: ' . $e->getMessage(), ['code' => $code]);
-    //         return null;
-    //     }
-    // }
-
     public function createPartner(array $data)
     {
         try {
@@ -78,23 +67,24 @@ class PartnerService
         }
     }
 
-    // public function updateClass($id, array $data)
-    // {
-    //     try {
-    //         Log::info('Updating class', ['data' => $data]);
-    //         $class = $this->getClassById($id);
-    //         if(self::cekTransferClass($class->school->id, $data)){
-    //             Log::info('Transfer class success');
-    //         }else{
-    //             Log::warning('Transfer class failed');
-    //             return null;
-    //         }
-    //         return $this->classRepository->update($id, $data);
-    //     } catch (\Exception $e) {
-    //         Log::error('Error updating class: ' . $e->getMessage(), ['data' => $data]);
-    //         return null;
-    //     }
-    // }
+    public function updatePartner($id, array $data)
+    {
+        try {
+            Log::info('Updating class', ['data' => $data]);
+            $class = $this->getPartnerById($id);
+            // if(self::cekTransferClass($class->school->id, $data)){
+            //     Log::info('Transfer class success');
+            // }else{
+            //     Log::warning('Transfer class failed');
+            //     return null;
+            // }
+            // dd($class);
+            return $this->partnerRepository->update($id, $data);
+        } catch (\Exception $e) {
+            Log::error('Error updating class: ' . $e->getMessage(), ['data' => $data]);
+            return null;
+        }
+    }
 
     public function deletePartner($id)
     {
