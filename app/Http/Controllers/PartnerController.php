@@ -7,6 +7,7 @@ use App\Models\Partner;
 use Illuminate\Http\Request;
 use App\Services\SchoolService;
 use App\Services\PartnerService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -136,7 +137,35 @@ class PartnerController extends Controller
      */
     public function update(Request $request, Partner $partner)
     {
-        dd($request->all());
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:15',
+            'address' => 'required|string|max:255',
+            'contact' => 'required|string|max:255',
+            'website' => 'nullable|url|max:255',
+        ]);
+        DB::beginTransaction();
+        try{
+            $update = $this->partnerService->updatePartner($partner->id, $request->all());
+            if ($update['success'] == true) {
+                DB::commit();
+                Log::info('End Process Update Partner Controller');
+                Alert::toast($update['message'], 'success');
+                return redirect()->route('partners.index');
+            } else {
+                DB::rollBack();
+                Log::warning('Failed to update partner', ['partner_id' => $partner->id]);
+                Alert::toast($update['message'], 'error');
+                return back();
+            }
+        } catch(Exception $e){
+            DB::rollBack();
+            Log::error('Error in Update Partner Controller: '.$e->getMessage());
+            Alert::toast('Error in Update Partner Controller: '.$e->getMessage(), 'error');
+            return back();
+        }
+        
     }
 
     /**
