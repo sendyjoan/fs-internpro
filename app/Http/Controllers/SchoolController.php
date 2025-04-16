@@ -114,6 +114,7 @@ class SchoolController extends Controller implements HasMiddleware
             Log::info('SchoolController@store: School created successfully', ['school' => $school]);
             Alert::toast('School created successfully', 'success');
             DB::commit();
+            self::sentEmailGreetings($school);
             return redirect()->route('schools.index');
         } catch (\Exception $e) {
             // Return toast swal for error message
@@ -251,11 +252,11 @@ class SchoolController extends Controller implements HasMiddleware
         }
     }
 
-    public function sentEmailGreetings(){
+    public function sentEmailGreetings($school){
         
         $data = [
-            'name' => 'SMK Negeri 1 Testing',
-            'message' => 'This is a test email from Laravel 12.'
+            'name' => $school->name,
+            // 'message' => 'This is a test email from Laravel 12.'
         ];
 
         Mail::to("sendyjoan5@gmail.com")->send(new SchoolGreetings($data));

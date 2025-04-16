@@ -62,7 +62,7 @@ Route::middleware('auth')->group(function () {
     
     Route::resource('/users', UserController::class);
     Route::resource('schools', SchoolController::class);
-    Route::get('/kirim-email-sekolah', [SchoolController::class, 'sentEmailGreetings'])->name('kirim-email-sekolah');
+    // Route::get('/kirim-email-sekolah', [SchoolController::class, 'sentEmailGreetings'])->name('kirim-email-sekolah');
     Route::resource('majors', MajorController::class);
     Route::resource('classes', KelasController::class);
     Route::resource('partners', PartnerController::class);
