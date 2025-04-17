@@ -9,15 +9,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Services\AdministratorService;
+use App\Services\SchoolService;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class AdministratorController extends Controller
 {
     protected $administratorService;
+    protected $schoolService;
 
-    public function __construct(AdministratorService $administratorService)
+    public function __construct(AdministratorService $administratorService, SchoolService $schoolService)
     {
         $this->administratorService = $administratorService;
+        $this->schoolService = $schoolService;
     }
     /**
      * Display a listing of the resource.
@@ -113,24 +116,80 @@ class AdministratorController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
+    public function edit(string $id)
     {
-        dd(__FILE__ . ' ' . __LINE__);
+        try{
+            if (Auth::user()->hasRole('Super Administrator')) {
+                $schools = $this->schoolService->getAllSchools();
+                if (!$schools) {
+                    Alert::toast('Error fetching schools: ' . $schools['message'], 'error');
+                    return redirect()->back();
+                }
+            } else {
+                $schools = [];
+            }
+            $administrator = $this->administratorService->findById($id);
+            if ($administrator['error']) {
+                Alert::toast('Error fetching administrator: ' . $administrator['message'], 'error');
+                return redirect()->back();
+            }else{
+                $administrator = $administrator['data'];
+            }
+            return view('modules.administrators.edit', compact('administrator', 'schools'));
+        } catch (Exception $e) {
+            Log::error('Error showing edit form: ' . $e->getMessage(), ['detail', $e->getTraceAsString()]);
+            Alert::toast('Error showing edit form: ' . $e->getMessage(), 'error');
+            return redirect()->back();
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, string $user)
     {
-        dd(__FILE__ . ' ' . __LINE__);
+        try{
+            $request->validate([
+                'username' => 'required|string|max:255|unique:users,username,' . $user,
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email,' . $user,
+                'phone' => 'required|unique:users,phone,' . $user,
+                'school' => Auth::user()->hasRole('Super Administrator') ? 'required|exists:schools,id' : 'nullable|exists:schools,id',
+            ]);
+            Log::debug('Validation passed, updating administrator', $request->all());
+            $admin = $this->administratorService->update($request->all(), $user);
+            if ($admin['error']) {
+                Alert::toast('Error updating administrator: ' . $admin['message'], 'error');
+                return redirect()->back();
+            }else{
+                Alert::toast('Administrator updated successfully', 'success');
+                return redirect()->route('administrators.index');
+            }
+        } catch (Exception $e) {
+            Log::error('Error updating administrator: ' . $e->getMessage(), ['detail', $e->getTraceAsString()]);
+            Alert::toast('Error updating administrator: ' . $e->getMessage(), 'error');
+            return redirect()->back();
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(string $user)
     {
-        dd(__FILE__ . ' ' . __LINE__);
+        try {
+            $admin = $this->administratorService->delete($user);    
+            if ($admin['error']) {
+                Alert::toast('Error deleting administrator: ' . $admin['message'], 'error');
+                return redirect()->back();
+            }else{
+                Alert::toast('Administrator deleted successfully', 'success');
+                return redirect()->route('administrators.index');
+            }
+        } catch (Exception $e) {
+            Log::error('Error deleting administrator: ' . $e->getMessage(), ['detail', $e->getTraceAsString()]);
+            Alert::toast('Error deleting administrator: ' . $e->getMessage(), 'error');
+            return redirect()->back();
+        }
     }
 }

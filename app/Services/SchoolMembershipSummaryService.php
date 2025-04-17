@@ -315,4 +315,42 @@ class SchoolMembershipSummaryService
             throw $e;
         }
     }
+
+    public function decreaseAdministrator($id){
+        try {
+            Log::info('Decreasing administrator for school membership summary', ['school_id' => $id]);
+            $summary = $this->schoolMembershipSummaryRepositoryInterfaces->getSchoolMembershipSummaryBySchoolId($id);
+            Log::info('School membership summary retrieved', ['summary_id' => $summary->id]);
+
+            Log::info('Get membership by ID', ['membership_id' => $summary->membership_id]);
+            $membership = $this->membershipService->getMembershipById($summary->membership_id);
+            Log::info('Membership retrieved', ['membership_id' => $membership->id]);
+
+            if ($summary->administrators_used <= 0) {
+                Log::warning('Administrators used is less than or equals 0', [
+                    'administrators_used' => $summary->administrators_used,
+                    'max_administrators' => $membership->max_administrators
+                ]);
+                return [
+                    'error' => true,
+                    'message' => 'Administrators used is less than or equals 0'
+                ];
+            }
+
+            $summary->administrators_used -= 1;
+            $summary->save();
+            Log::info('Administrator decreased successfully', ['summary_id' => $summary->id, 'administrators_used' => $summary->administrators_used]);
+            return [
+                'error' => false,
+                'message' => 'Administrator decreased successfully'
+            ];
+        } catch (\Exception $e) {
+            // Log the error message
+            Log::error('Error decreasing administrator for school membership summary: ' . $e->getMessage(), ['school_id' => $id]);
+            return [
+                'error' => true,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
 }
