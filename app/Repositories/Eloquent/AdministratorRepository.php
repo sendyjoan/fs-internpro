@@ -102,6 +102,10 @@ class AdministratorRepository implements SchoolAdministratorRepositoryInterface
         try {
             Log::info('Updating administrator with ID ' . $id, $data);
             $administrator = $this->administrator->findOrFail($id);
+            if (!$administrator) {
+                Log::error('Administrator not found with ID: ' . $id);
+                return ['error' => true, 'message' => 'Administrator not found.'];
+            }
             $administrator->update($data);
             Log::info('Administrator updated successfully', $administrator->toArray());
             return ['error' => false, 'data' => $administrator];
@@ -116,6 +120,15 @@ class AdministratorRepository implements SchoolAdministratorRepositoryInterface
         try {
             Log::info('Deleting administrator with ID ' . $id);
             $administrator = $this->administrator->findOrFail($id);
+            if (!$administrator) {
+                Log::error('Administrator not found with ID: ' . $id);
+                return ['error' => true, 'message' => 'Administrator not found.'];
+            }
+            $decrease = $this->schoolMember->decreaseAdministrator($administrator->school_id);
+            if ($decrease['error']) {
+                Log::error('Error decreasing administrator count: ' . $decrease['message']);
+                return ['error' => true, 'message' => $decrease['message']];
+            }
             $administrator->delete();
             Log::info('Administrator deleted successfully', $administrator->toArray());
             return ['error' => false, 'message' => 'Administrator deleted successfully.'];
