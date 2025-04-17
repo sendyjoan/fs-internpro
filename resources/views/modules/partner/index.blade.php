@@ -62,7 +62,7 @@
                                 <td>{{ $partner->phone }}</td>
                                 <td>{{ $partner->contact }}</td>
                                 @if (Auth::user()->hasRole('Super Administrator'))
-                                    <td>{{ $partner->school->name }}</td>
+                                    <td>{{ $partner->school->name ?? 'School Deleted' }}</td>
                                 @endif
                                 @if (auth()->user()->can('partner-edit') || auth()->user()->can('partner-delete'))
                                     <td>
