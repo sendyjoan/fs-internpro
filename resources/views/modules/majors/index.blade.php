@@ -54,7 +54,7 @@
                                 <td>{{ $major->code }}</td>
                                 <td>{{ $major->name }}</td>
                                 @if (Auth::user()->hasRole('Super Administrator'))
-                                    <td>{{ $major->school->name }}</td>
+                                    <td>{{ $major->school->name ?? 'School Deleted' }}</td>
                                 @endif
                                 @if (auth()->user()->can('major-edit') || auth()->user()->can('major-delete'))
                                     <td>

@@ -58,7 +58,7 @@
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->phone }}</td>
                                 @if (Auth::user()->hasRole('Super Administrator'))
-                                    <td>{{ $user->school->name }}</td>
+                                    <td>{{ $user->school->name ?? 'School Deleted'}}</td>
                                 @endif
                                 @if (auth()->user()->can('administrator-edit') || auth()->user()->can('administrator-delete'))
                                     <td>

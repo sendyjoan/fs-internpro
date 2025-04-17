@@ -58,7 +58,7 @@
                     @if (Auth::user()->hasRole('Super Administrator'))
                     <tr>
                         <th width="30%">Partner Name</th>
-                        <td>{{ $partner->school->name }}</td>
+                        <td>{{ $partner->school->name ?? 'School Deleted' }}</td>
                     </tr>
                     @endif
                 </table>

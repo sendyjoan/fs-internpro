@@ -37,12 +37,12 @@
                     </tr>
                     <tr>
                         <th width="30%">Name Major</th>
-                        <td>{{ $class->major->name }}</td>
+                        <td>{{ $class->major->name ?? 'Major Deleted' }}</td>
                     </tr>
                     @if (Auth::user()->hasRole('Super Administrator'))
                     <tr>
                         <th width="30%">School Name</th>
-                        <td>{{ $class->school->name }}</td>
+                        <td>{{ $class->school->name ?? 'School Deleted'  }}</td>
                     </tr>
                     @endif
                 </table>
