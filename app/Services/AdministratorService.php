@@ -39,10 +39,10 @@ class AdministratorService
             $admin = $this->administratorRepository->findById($id);
             if ($admin['error']) {
                 Log::error('Error fetching administrator: ' . $admin['message']);
-                return $admin;
+                return ['error' => true, 'message' => $admin['message']];
             }
             Log::info('Fetched administrator successfully', $admin['data']->toArray());
-            return $admin;
+            return ['error' => false, 'data' => $admin['data']];
         } catch (Exception $e) {
             Log::error('Error fetching administrator: ' . $e->getMessage());
             return ['error' => true, 'message' => $e->getMessage()];
@@ -65,6 +65,53 @@ class AdministratorService
         }catch (Exception $e){
             DB::rollBack();
             Log::error('Error creating new administrator: ' . $e->getMessage(), ['detail' => $e->getTraceAsString()]);
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function update($data, $id){
+        try{
+            DB::beginTransaction();
+            Log::debug('Starting to update administrator with ID ' . $id, $data);
+            $data['school_id'] = $data['school'];
+            $admin = $this->administratorRepository->update($id, $data);
+            // dd($admin);
+            if ($admin['error']) {
+                Log::error('Error updating administrator: ' . $admin['message']);
+                return ['error' => true, 'message' => $admin['message']];
+            }
+            Log::info('Administrator updated successfully', $admin['data']->toArray());
+            Alert::toast('Administrator updated successfully', 'success');
+            DB::commit();
+            return ['error' => false, 'data' => $admin['data']];
+        }catch (Exception $e){
+            DB::rollBack();
+            Log::error('Error updating administrator: ' . $e->getMessage(), ['detail' => $e->getTraceAsString()]);
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function delete($id){
+        try{
+            DB::beginTransaction();
+            Log::debug('Starting to delete administrator with ID ' . $id);
+            $admin = $this->administratorRepository->findById($id);
+            if ($admin['error']) {
+                Log::error('Error fetching administrator: ' . $admin['message']);
+                return ['error' => true, 'message' => $admin['message']];
+            }
+            $admin = $this->administratorRepository->delete($id);
+            if ($admin['error']) {
+                Log::error('Error deleting administrator: ' . $admin['message']);
+                return ['error' => true, 'message' => $admin['message']];
+            }
+            Log::info('Administrator deleted successfully');
+            Alert::toast('Administrator deleted successfully', 'success');
+            DB::commit();
+            return ['error' => false, 'data' => []];
+        }catch (Exception $e){
+            DB::rollBack();
+            Log::error('Error deleting administrator: ' . $e->getMessage(), ['detail' => $e->getTraceAsString()]);
             return ['error' => true, 'message' => $e->getMessage()];
         }
     }
