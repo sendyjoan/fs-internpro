@@ -5,6 +5,7 @@ namespace App\Services;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Repositories\Contracts\AdminRepositoryInterface;
 use App\Repositories\Contracts\SchoolAdministratorRepositoryInterface;
@@ -73,7 +74,11 @@ class AdministratorService
         try{
             DB::beginTransaction();
             Log::debug('Starting to update administrator with ID ' . $id, $data);
-            $data['school_id'] = $data['school'];
+            if (Auth::user()->hasRole('Super Administrator')) {
+                $data['school_id'] = $data['school'];
+            } else {
+                $data['school_id'] = Auth::user()->school_id;
+            }
             $admin = $this->administratorRepository->update($id, $data);
             // dd($admin);
             if ($admin['error']) {
