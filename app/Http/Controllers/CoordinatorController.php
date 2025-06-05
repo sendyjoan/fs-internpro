@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Major;
 use Exception;
 use App\Models\User;
+use App\Models\School;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Services\AdministratorService;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class CoordinatorController extends Controller
 {
@@ -43,7 +47,21 @@ class CoordinatorController extends Controller
      */
     public function create()
     {
-        dd(__FILE__ . ' ' . __LINE__);
+        try {
+            if (Auth::user()->hasRole('Super Administrator')) {
+                $schools = School::all();
+                // $majors = Major::all();
+            } else {
+                $schools = [];
+                // $majors = Major::where('school_id', Auth::user()->school_id)->get();
+            }
+            $majors = [];
+            return view('modules.coordinators.create', compact('schools', 'majors'));
+        } catch (Exception $e) {
+            Log::error('Error showing create form: ' . $e->getMessage(), ['detail', $e->getTraceAsString()]);
+            Alert::toast('Error showing create form: ' . $e->getMessage(), 'error');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -51,7 +69,7 @@ class CoordinatorController extends Controller
      */
     public function store(Request $request)
     {
-        dd(__FILE__ . ' ' . __LINE__);
+        dd($request->all());
     }
 
     /**
@@ -84,5 +102,20 @@ class CoordinatorController extends Controller
     public function destroy(User $user)
     {
         dd(__FILE__ . ' ' . __LINE__);
+    }
+
+    public function selectMajor(String $school_id){
+        try {
+            Log::debug('Fetching majors for school ID: ' . $school_id);
+            $majors = Major::where('school_id', $school_id)->get();
+            if ($majors->isEmpty()) {
+                Log::warning('No majors found for school ID: ' . $school_id);
+                return response()->json(['error' => 'No majors found'], 404);
+            }
+            return response()->json($majors, 200);
+        } catch (Exception $e) {
+            Log::error('Error fetching majors: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to fetch majors'], 500);
+        }
     }
 }

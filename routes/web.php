@@ -68,6 +68,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('partners', PartnerController::class);
     Route::resource('administrators', AdministratorController::class);
     Route::resource('coordinators', CoordinatorController::class);
+    Route::get('coordinators/select-major/{id}', [CoordinatorController::class, 'selectMajor'])->name('coordinators.selectMajor');
     Route::resource('teachers', TeacherController::class);
     Route::resource('students', StudentController::class);
     Route::resource('mentors', MentorController::class);
