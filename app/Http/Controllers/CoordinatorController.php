@@ -69,6 +69,16 @@ class CoordinatorController extends Controller
      */
     public function store(Request $request)
     {
+        // validation
+        // dd($request->all());
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'username' => 'required|string|max:255|unique:users',
+            'phone' => 'required|string|max:255',
+            'school' => 'required|exists:schools,id',
+            'major' => 'required|exists:majors,id',
+        ]);
         dd($request->all());
     }
 
