@@ -11,6 +11,7 @@
   <!-- Summernote CSS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs4.min.css" rel="stylesheet">
 
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <!-- CSS Libraries -->
   {{-- <link rel="stylesheet" href="{{asset('node_modules/bootstrap-daterangepicker/daterangepicker.css')}}">
   <link rel="stylesheet" href="{{asset('node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css')}}">
@@ -74,6 +75,7 @@
   <!-- Template JS File -->
   <script src="{{asset('assets/js/scripts.js')}}"></script>
   <script src="{{asset('assets/js/custom.js')}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
   <!-- Page Specific JS File -->
   <script src="{{asset('assets/js/page/forms-advanced-forms.js')}}"></script>
