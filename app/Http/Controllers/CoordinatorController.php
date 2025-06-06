@@ -51,11 +51,11 @@ class CoordinatorController extends Controller
             if (Auth::user()->hasRole('Super Administrator')) {
                 $schools = School::all();
                 // $majors = Major::all();
+                $majors = [];
             } else {
                 $schools = [];
-                // $majors = Major::where('school_id', Auth::user()->school_id)->get();
+                $majors = Major::where('school_id', Auth::user()->school_id)->get();
             }
-            $majors = [];
             return view('modules.coordinators.create', compact('schools', 'majors'));
         } catch (Exception $e) {
             Log::error('Error showing create form: ' . $e->getMessage(), ['detail', $e->getTraceAsString()]);
@@ -76,10 +76,34 @@ class CoordinatorController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'username' => 'required|string|max:255|unique:users',
             'phone' => 'required|string|max:255',
-            'school' => 'required|exists:schools,id',
             'major' => 'required|exists:majors,id',
         ]);
-        dd($request->all());
+        if (Auth::user()->hasRole('Super Administrator')) {
+            $request->validate([
+                'school' => 'required|exists:schools,id',
+            ]);
+        } else {
+            $request->merge(['school' => Auth::user()->school_id]);
+        }
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'username' => $request->username,
+            'phone' => $request->phone,
+            'password' => bcrypt($request->username), // default password, can be changed later
+            'school_id' => $request->school,
+            'major_id' => $request->major,
+        ]);
+        if (!$user) {
+            Log::error('Failed to create user', ['data' => $request->all()]);
+            Alert::toast('Failed create coordinator', 'error');
+            return redirect()->back();
+        }else {
+            Log::info('User created successfully', ['user' => $user]);
+            $user->assignRole('Major Coordinator');
+        }
+        Alert::toast('Success Create Coordinator', 'success');
+        return redirect()->route('coordinators.index');
     }
 
     /**

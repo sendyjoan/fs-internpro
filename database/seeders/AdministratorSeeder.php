@@ -32,11 +32,15 @@ class AdministratorSeeder extends Seeder
             $schoolMembership->administrators_used += 1;
             $schoolMembership->save();
 
+            // Select all id of major 
+            $majors = $school->majors()->pluck('id')->toArray();
+
             $userMajorCoordinator = User::create([
                 'name' => 'Koordinator Jurusan SMK Development',
                 'email' => 'major@smkdev.ac.id',
                 'phone' => '087890654377',
                 'school_id' => $school->id,
+                'major_id' => $majors[array_rand($majors)],
                 'username' => 'majorcoordinator',
                 'email_verified_at' => now(),
                 'password' => bcrypt('majorcoordinator'),

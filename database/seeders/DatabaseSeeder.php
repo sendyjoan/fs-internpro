@@ -6,8 +6,9 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
-use Database\Seeders\UserAndPermissionSeeder;
+use Database\Seeders\MajorSeeder;
 use Database\Seeders\MembershipSeeder;
+use Database\Seeders\UserAndPermissionSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -28,6 +29,7 @@ class DatabaseSeeder extends Seeder
             UserAndPermissionSeeder::class,
             MembershipSeeder::class,
             SchoolSeeder::class,
+            MajorSeeder::class,
             AdministratorSeeder::class,
         ]);
     }

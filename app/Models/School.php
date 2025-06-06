@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Major;
 use App\Models\SchoolMembershipSummary;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -31,5 +32,10 @@ class School extends Model
     public function membership()
     {
         return $this->hasOne(SchoolMembershipSummary::class);
+    }
+
+    public function majors()
+    {
+        return $this->hasMany(Major::class);
     }
 }
